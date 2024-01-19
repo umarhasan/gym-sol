@@ -13,8 +13,6 @@
   <link rel="stylesheet" href="{{asset('/admin')}}/vendors/css/vendor.bundle.base.css">
   <link rel="stylesheet" href="{{asset('/admin')}}/vendors/css/vendor.bundle.addons.css">
   <!-- endinject -->
-  <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="{{asset('/admin')}}/css/style.css">
   <!-- endinject -->
@@ -29,7 +27,7 @@
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light text-left p-5">
               <div class="brand-logo">
-                <img src="{{asset('/admin')}}/images/logo.png" alt="logo">
+                <img src="{{asset('/admin')}}/images/logo.jpg" alt="logo">
               </div>
               <h4>Hello! let's get started</h4>
               <h6 class="font-weight-light">Sign in to continue.</h6>
@@ -51,12 +49,9 @@
                 @csrf
                 <div class="input-group mb-3">
                   <input type="email" class="form-control" name="email" required placeholder="Email">
-                  <!-- {{ $errors->first('email') }} -->
-
                 </div>
                 <div class="input-group mb-3">
                   <input type="password" class="form-control" name="password" required placeholder="Password">
-                  
                   @error('password')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -72,7 +67,6 @@
                       </label>
                     </div>
                   </div>
-                  <!-- /.col -->
                   <div class="col-4">
                     <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                   </div>
@@ -81,7 +75,6 @@
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
-                  <!-- /.col -->
                 </div>
               </form>
             </div>
@@ -105,7 +98,5 @@
   <script src="{{asset('/admin')}}/js/todolist.js"></script>
   <!-- endinject -->
 </body>
-
-
 <!-- Mirrored from www.urbanui.com/melody/template/pages/samples/register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Sep 2018 06:08:53 GMT -->
 </html>

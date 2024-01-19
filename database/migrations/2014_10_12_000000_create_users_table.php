@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('dob')->nullable();
             $table->integer('fees')->nullable();
             $table->string('gender')->default('male');
-            $table->text('image');
+            $table->text('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('created_by')->nullable();
@@ -30,7 +30,6 @@ return new class extends Migration
             $table->integer('department_id')->nullable();
             $table->integer('is_welcome_msg_sent')->default(0);
             $table->rememberToken();
-
             $table->timestamps();
         });
     }

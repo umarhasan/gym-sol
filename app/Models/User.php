@@ -26,10 +26,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'department_id',
         'name',
         'email',
+        'phone',
+        'dob',
+        'fees',
+        'image',
+        'is_active',
+        'club_id',
+        'is_welcome_msg_sent',
         'password',
         'is_email_verified',
         'created_by',
-        'is_admin'
+        'is_admin',
     ];
 
     /**
