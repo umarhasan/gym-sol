@@ -13,21 +13,13 @@ use Session;
 
 class DashboardController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    
     public function __construct()
     {
         $this->middleware(['auth','verified']);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    
     public function index()
     {
         // return Auth::user();
@@ -82,5 +74,30 @@ class DashboardController extends Controller
         $user->save();
 
         return redirect()->back()->with("success","Password changed successfully !");
+    }
+
+    public function profileupdate(Request $request){
+
+        // dd($request->all());
+
+        $user = User::find(Auth::user()->id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone_number;
+        $user->address = $request->address;
+        $user->created_by = auth()->user()->id;
+
+        // Check if an image is present in the request
+        if ($request->hasFile('profile')) {
+            $file = $request->file('profile');
+            $fileName = $file->getClientOriginalName() . time() . "Hatch-social." . $file->getClientOriginalExtension();
+            $file->move('uploads/user/', $fileName);
+            $user->image = $fileName;
+        }
+
+        $user->save();
+
+        session::flash('success','Record Updated Successfully');
+        return redirect('profile')->with('success','Record Uploaded Successfully');
     }
 }

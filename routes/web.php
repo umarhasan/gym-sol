@@ -29,6 +29,8 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\LeadStatusController;
 use App\Http\Controllers\LeadSourcesController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\StaffController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -81,7 +83,8 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('mail', MailController::class);
     Route::resource('leadStatus', LeadStatusController::class);
     Route::resource('leadSources', LeadSourcesController::class);
-
+    Route::resource('member', MemberController::class);
+    Route::resource('staff', StaffController::class);
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');
   	Route::get('projects/fetch', [ProjectController::class, 'assign_project'])->name('projects.fetch');
     
@@ -94,8 +97,11 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('packages', PackagesController::class);
     Route::resource('category', CategoryController::class);
     Route::resource('subcategory', SubCategoryController::class);
+    
     Route::get('/profile', [DashboardController::class, 'profile'])->name('profile.index');
-    Route::post('/profile/update', [DashboardController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [DashboardController::class, 'profileupdate'])->name('user.update');
+  
+
     Route::resource('product', ProductController::class);
     Route::get('subcatories/{category}', [SubCategoryController::class,'subcatories']);
     Route::get('product/{id}/images', [ProductController::class, 'images']);
