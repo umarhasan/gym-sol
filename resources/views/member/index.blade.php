@@ -61,19 +61,19 @@
                           <td>{{ $user->email }}</td>
                           <td>{{ $user->phone }}</td>
                           <td>{{ $user->fees }}</td>
-                          
                           <td>
                             <div class="btn-group">
+                            <a class="btn btn-warning btn-a" href="{{ route('member.profile',$user->id) }}"><i class="fa fa-eye"></i></a> &nbsp;   
                             
-                              @can('user-edit')
+                              @can('member-edit')
                                 <a class="btn btn-primary btn-a" href="{{ route('member.edit',$user->id) }}">Edit</a> &nbsp;   
                               @endcan
-                              @can('user-delete')
-                              <form method="post" action="{{route('member.destroy',$user->id)}}">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
-                              </form>
+                              @can('member-delete')
+                                <form method="post" action="{{route('member.destroy',$user->id)}}">
+                                  @csrf
+                                  @method('delete')
+                                    <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
+                                </form>
                               @endcan
                             </div>
                           </td>

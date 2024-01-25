@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('leadStatus', LeadStatusController::class);
     Route::resource('leadSources', LeadSourcesController::class);
     Route::resource('member', MemberController::class);
+    Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
     Route::resource('staff', StaffController::class);
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');
   	Route::get('projects/fetch', [ProjectController::class, 'assign_project'])->name('projects.fetch');

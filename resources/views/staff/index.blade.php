@@ -53,34 +53,32 @@
                         @php
                         $id =1;
                         @endphp
-                        @foreach($data as $key => $user)
-                        <tr>
-                          <td>{{$id++}}</td>
-                          <td>{{ $user->name }}</td>
-                          <td>{{ $user->email }}</td>
-                          <td>{{ $user->phone }}</td>
-                          <td>{{ $user->fees }}</td>
-                          
-                          <td>
-                            <div class="btn-group">
-                           
-                              @can('user-edit')
-                                <a class="btn btn-primary btn-a" href="{{ route('users.edit',$user->id) }}">Edit</a> &nbsp;   
-                              @endcan
-                              @can('user-permission')
-                                <a class="btn btn-primary btn-a" href="{{ route('users.permission',$user->id) }}">User Permission</a>    
-                              @endcan
-                              @can('user-delete')
-                              <form method="post" action="{{route('users.destroy',$user->id)}}">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
-                              </form>
-                              @endcan
-                            </div>
-                          </td>
-                        </tr>
-                        @endforeach
+                          @foreach($data as $key => $user)
+                          <tr>
+                            <td>{{$id++}}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->phone }}</td>
+                            <td>{{ $user->fees }}</td>
+                            <td>
+                              <div class="btn-group">
+                                @can('user-edit')
+                                  <a class="btn btn-primary btn-a" href="{{ route('staff.edit',$user->id) }}">Edit</a> &nbsp;   
+                                @endcan
+                                @can('user-permission')
+                                  <a class="btn btn-primary btn-a" href="{{ route('staff.permission',$user->id) }}">User Permission</a>    
+                                @endcan
+                                @can('user-delete')
+                                <form method="post" action="{{route('staff.destroy',$user->id)}}">
+                                  @csrf
+                                  @method('delete')
+                                  <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
+                                </form>
+                                @endcan
+                              </div>
+                            </td>
+                          </tr>
+                          @endforeach
                         @endif
                       </tbody>
                     </table>

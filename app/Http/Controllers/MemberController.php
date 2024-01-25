@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Attendance;
+use App\Models\Fees;
 use App\Models\Department;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Carbon\Carbon;
 use DB;
 use Hash;
 use Auth;
@@ -69,6 +72,7 @@ class MemberController extends AdminBaseController
         $data['departments'] = Department::all();
         $data['user'] = User::find($id);
         $data['roles'] = Role::select(['id', 'name'])->where('name', 'member')->get();
+        
         $data['userRole'] = $data['user']->roles->pluck('name','name')->all();
         return view('member.edit',$data);
     }
@@ -100,6 +104,28 @@ class MemberController extends AdminBaseController
     {
         User::find($id)->delete();
         return redirect()->route('member.index')->with('success','User deleted successfully');
+    }
+
+    public function MemberProfile($id)
+    {
+        $userAttendances = Attendance::where('user_id', $id)->paginate(10);
+        $userSubscriptions = Fees::where('user_id', $id)->paginate(10);
+        $member = User::where('id', $id)->first();
+        $lastSubscription = Fees::where('user_id', $id)->selectRaw('MAX(expiry) as latest_expiration')->first();
+        $currentDate = Carbon::now();
+        if (isset($lastSubscription->latest_expiration)) {
+            $lastExp = $lastSubscription->latest_expiration;
+            $timeLeft = $currentDate->diffInDays($lastExp);
+        } else {
+            $timeLeft = 0;
+        }
+        return view('member.member_profile', [
+            'latestSubscription' => $lastSubscription,
+            'subscriptions' => $userSubscriptions,
+            'attendances' => $userAttendances,
+            'member' => $member,
+            'timeLeft' => $timeLeft, // Include the timeLeft variable in the view
+        ]);
     }
 
 }
