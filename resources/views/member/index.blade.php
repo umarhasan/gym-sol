@@ -46,6 +46,7 @@
                           <th>Email</th>
                           <th>Phone</th>
                           <th>Fees</th>
+                          <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -61,6 +62,46 @@
                           <td>{{ $user->email }}</td>
                           <td>{{ $user->phone }}</td>
                           <td>{{ $user->fees }}</td>
+                          <td>
+                          @php 
+                                $currentYear = date('Y');
+                                $memberSubscription = DB::table('fees')
+                                ->whereYear('expiry', $currentYear)
+                                ->where('user_id',$user->id)
+                                ->select(DB::raw('MAX(expiry) as latest_expiration'))
+                                ->first();
+
+                                if(isset($memberSubscription)) {
+                                    $expired = Carbon\Carbon::now()->gte(Carbon\Carbon::parse($memberSubscription->latest_expiration));
+                                }    
+                            @endphp
+                            @if(isset($memberSubscription->latest_expiration))
+                          @if ($expired)
+                            <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-danger">
+                              <i class="fa-duotone fa-clock mr-1 text-danger"></i> &nbsp; Subscription has expired.
+                            </span>
+                           @else
+                           @if(Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration))<=8)
+                            <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-warning">
+                             <i class="fa-duotone fa-clock mr-1 text-warning"></i> &nbsp; Subscription will expire in {{  Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days
+                            </span>
+                           @elseif(Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration))>8)
+                             <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-primary">
+                                <i class="fa-duotone fa-clock mr-1 text-primary"></i> &nbsp; 
+                                Subscription will expire in {{  Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days.
+                             </span>   
+                             @else
+                                <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-light">
+                                    <i class="fa-duotone fa-clock mr-1 text-light"></i> &nbsp; Not Paid Yet!
+                            </span>
+                             @endif
+                           @endif
+                        @else
+                            <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-light">
+                                <i class="fa-duotone fa-clock mr-1 text-light"></i> &nbsp; Not Paid Yet!
+                           </span>
+                        @endif 
+                                     </td>
                           <td>
                             <div class="btn-group">
                             <a class="btn btn-warning btn-a" href="{{ route('member.profile',$user->id) }}"><i class="fa fa-eye"></i></a> &nbsp;   
