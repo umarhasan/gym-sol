@@ -36,7 +36,6 @@ class MemberController extends AdminBaseController
     {
         //  $roles = Role::select(['id','name'])->get();
          $roles = Role::select(['id', 'name'])->where('name', 'member')->get();
-         $departments = Department::get();
         return view('member.create',compact('roles','departments'));
     }
     public function store(Request $request)
@@ -69,10 +68,8 @@ class MemberController extends AdminBaseController
     }
     public function edit($id)
     {
-        $data['departments'] = Department::all();
         $data['user'] = User::find($id);
         $data['roles'] = Role::select(['id', 'name'])->where('name', 'member')->get();
-        
         $data['userRole'] = $data['user']->roles->pluck('name','name')->all();
         return view('member.edit',$data);
     }

@@ -11,12 +11,12 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1>User Form</h1>
+                <h1>Member Form</h1>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active">Create New User</li>
+                  <li class="breadcrumb-item active">Create New Member</li>
                 </ol>
               </div>
             </div>
@@ -71,17 +71,6 @@
                             <select name="roles[]" class="form-control" required>
                               @foreach($roles as $role)
                               <option value="{{$role->name}}">{{$role->name}}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                          <div class="form-group">
-                            <strong>Department:</strong>
-                            <select name="departments" class="form-control" required>
-                              <option value="">::select departmemt::</option>
-                              @foreach($departments as $department)
-                              <option value="{{$department->id}}">{{$department->departments}}</option>
                               @endforeach
                             </select>
                           </div>

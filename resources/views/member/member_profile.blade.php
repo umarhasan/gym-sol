@@ -126,7 +126,6 @@
                         </ul>
                     </div>
                     @endif
-            
                     <div class="row" id="member-profile-page">
                         <!-- Left Column - Member Details -->
                         <div class="col-xl-4 col-lg-4 col-sm-12 col-md-12">
@@ -251,7 +250,6 @@
                                
                             </div>
                         </div>
-
                     </div>
                     <!-- Attendance -->
                     <div class="row" wire:ignore>
@@ -267,7 +265,7 @@
                                 </div>
                                 <div class="card-body p-0 mt-2 px-2">
                                     <div class="table-responsive">
-                                        <table class="table shadow-hover attendance-dt">
+                                        <table id="order-listing" class="table dataTable no-footer attendance-dt" role="grid" aria-describedby="order-listing_info">
                                             <thead>
                                                 <tr>
                                                     <th><span class="font-w600 text-black fs-16">#</span></th>
@@ -320,7 +318,7 @@
                                 </div>
                                 <div class="card-body p-0 mt-2 px-2">
                                     <div class="table-responsive">
-                                        <table class="table shadow-hover subscription-dt">
+                                        <table id="order-listing1" class="table dataTable no-footer subscription-dt" role="grid" aria-describedby="order-listing_info">
                                             <thead>
                                                 <tr>
                                                     <th><span class="font-w600 text-black fs-16">Paid On</span></th>
