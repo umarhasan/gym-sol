@@ -30,6 +30,8 @@ use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\LeadStatusController;
 use App\Http\Controllers\LeadSourcesController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\FeesController;
+use App\Http\Controllers\FeesCollectionsController;
 use App\Http\Controllers\StaffController;
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +86,9 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('leadStatus', LeadStatusController::class);
     Route::resource('leadSources', LeadSourcesController::class);
     Route::resource('member', MemberController::class);
+    Route::resource('fees', FeesController::class);
+    Route::get('fees/collections', [FeesCollectionsController::class,'index'])->name('fees-collections');
+
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
     Route::resource('staff', StaffController::class);
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');

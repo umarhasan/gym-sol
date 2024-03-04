@@ -149,6 +149,22 @@
               </div>
             </li>
             @endcan
+           
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#fees-collections-layouts" aria-expanded="false" aria-controls="fees-collections-layouts">
+                <i class="fab fa-trello menu-icon"></i>
+                <span class="menu-title">Fees Collections</span>
+                <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="fees-collections-layouts">
+                <ul class="nav flex-column sub-menu">
+                  
+                  <li class="nav-item"> <a class="nav-link" href="{{route('fees-collections')}}">Fees Collections</a></li>
+                 
+                </ul>
+              </div>
+            </li>
+        
             @can('staff-list')
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#staff-layouts" aria-expanded="false" aria-controls="staff-layouts">

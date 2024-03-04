@@ -107,9 +107,8 @@
                             <a class="btn btn-warning btn-a" href="{{ route('member.profile',$user->id) }}"><i class="fa fa-eye"></i></a> &nbsp;   
                             
                               @can('member-edit')
-                                <a class="btn btn-primary btn-a" href="{{ route('member.edit',$user->id) }}"><i class="fa fa-edit"></i></a> &nbsp;   
+                                <a class="btn btn-primary btn-a" href="{{ route('member.edit',$user->id) }}">Edit</a> &nbsp;   
                               @endcan
-                              <a class="btn btn-primary btn-a" href="{{ route('fees.create',$user->id) }}"><i class="fa fa-file-invoice-dollar"></i></a> &nbsp;   
                               @can('member-delete')
                                 <form method="post" action="{{route('member.destroy',$user->id)}}">
                                   @csrf
