@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('leadSources', LeadSourcesController::class);
     Route::resource('member', MemberController::class);
     Route::resource('fees', FeesController::class);
+    Route::get('fees/create/{id}', [FeesController::class,'create'])->name('fees.create');
     Route::get('fees/collections', [FeesCollectionsController::class,'index'])->name('fees-collections');
 
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
