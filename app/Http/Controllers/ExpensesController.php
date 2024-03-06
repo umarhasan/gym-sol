@@ -21,24 +21,20 @@ class ExpensesController extends AdminBaseController
 {
     public function index()
     {
-        $currentMonth = Expense::where('club_id', auth()->user()->club_id)
-            ->when($this->search, function ($query) {
-                $query->where('expense_by', 'like', '%' . $this->search . '%')
-                      ->orWhere('amount', 'like', '%' . $this->search . '%');
-            })
+        $currentMonth = Expense::where('club_id', auth()->user()->id)
             ->whereMonth('date', '=', now()->month)
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
-        $expensesToday = Expense::where('club_id', auth()->user()->club_id)
+        $expensesToday = Expense::where('club_id', auth()->user()->id)
             ->whereDate('date', Carbon::today())
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
-        $lastSevenDays = Expense::where('club_id', auth()->user()->club_id)
+        $lastSevenDays = Expense::where('club_id', auth()->user()->id)
             ->where('date', '>=', now()->subDays(7))
             ->orderByDesc('id')
-            ->paginate(10);
+            ->get();
 
         return view('expenses.index', [
             'expenses' => $currentMonth,
@@ -46,7 +42,9 @@ class ExpensesController extends AdminBaseController
             'expensesLast7Days' => $lastSevenDays
         ]);
     }
-
+    public function create(){
+        return view('expenses.create');
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -56,27 +54,47 @@ class ExpensesController extends AdminBaseController
             'paid_to' => 'required',
             'details' => 'required',
         ]);
-
-        $expense = new Expense();
-        $expense->amount = $request->amount;
-        $expense->expense_by = $request->expense_by;
-        $expense->date = Carbon::parse($request->date);
-        $expense->details = $request->details;
-        $expense->paid_to = $request->paid_to;
-        $expense->club_id = auth()->user()->club_id;
-        $expense->save();
-
-        session()->flash('expenses-registered-successfully', ['title' => 'Well done!', 'body' => 'You have successfully added the expense.']);
-
+    
+        $data = [
+            'amount' => $request->amount,
+            'expense_by' => $request->expense_by,
+            'date' => Carbon::parse($request->date),
+            'details' => $request->details,
+            'paid_to' => $request->paid_to,
+            'club_id' => auth()->user()->id,
+        ];
+    
+        // Check if an expense with the same details already exists
+        $existingExpense = Expense::where('amount', $data['amount'])
+        ->where('expense_by', $data['expense_by'])
+        ->where('date', $data['date'])
+        ->where('details', $data['details'])
+        ->where('paid_to', $data['paid_to'])
+        ->where('club_id', $data['club_id'])
+        ->first();
+    
+        if ($existingExpense) {
+            session()->flash('expense-already-exists', ['title' => 'Duplicate Entry', 'body' => 'Expense with similar details already exists.']);
+        } else {
+            // Insert the expense into the database
+            $string = $data['paid_to'] . '-' . Carbon::now()->format('F-H:i');
+            $invoice_url = strtoupper($string);
+            $data['invoice_url'] = $invoice_url;
+    
+            $id = DB::table('expenses')->insertGetId($data);
+            session()->flash('expenses-registered-successfully', ['title' => 'Well done!', 'body' => 'You have successfully added the expense.']);
+        }
+    
         return redirect()->route('expenses.index');
     }
+
 
     public function edit(Expense $expense)
     {
         return view('expenses.edit', compact('expense'));
     }
 
-    public function update(Request $request, Expense $expense)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'amount' => 'required',
@@ -86,14 +104,19 @@ class ExpensesController extends AdminBaseController
             'details' => 'required',
         ]);
 
+        $expense = Expense::findOrFail($id);
+
         $expense->amount = $request->amount;
         $expense->expense_by = $request->expense_by;
         $expense->date = Carbon::parse($request->date);
         $expense->details = $request->details;
         $expense->paid_to = $request->paid_to;
+
+        // Add other fields to be updated as needed
+
         $expense->save();
 
-        session()->flash('expenses-registered-successfully', ['title' => 'Well done!', 'body' => 'Your have successfully updated the expense.']);
+        session()->flash('expense-updated-successfully', ['title' => 'Success', 'body' => 'Expense updated successfully.']);
 
         return redirect()->route('expenses.index');
     }

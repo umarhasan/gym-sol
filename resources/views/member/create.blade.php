@@ -38,7 +38,7 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <form method="post" class="" action="{{route('member.store')}}">
+                    <form method="post" class="" action="{{route('member.store')}}" enctype="multipart/form-data">
                       @csrf
                       <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">
@@ -75,6 +75,49 @@
                             </select>
                           </div>
                         </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                          <div class="form-group">
+                              <strong>Gender:</strong><br>
+                              <label class="radio-inline">
+                                  <input type="radio" name="gender" value="male" required> Male
+                              </label>
+                              <label class="radio-inline">
+                                  <input type="radio" name="gender" value="female"> Female
+                              </label>
+                          </div>
+                      </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <strong>Phone:</strong>
+                                <input class="form-control" type="text" name="phone" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <strong>Date of Birth:</strong>
+                                <input class="form-control" type="date" name="dob" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <strong>Expiry Date:</strong>
+                                <input class="form-control" type="date" name="expiry" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <strong>Fees:</strong>
+                                <input class="form-control" type="number" name="fees" required>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <strong>Profile Image:</strong>
+                                <input type="file" name="profile" class="form-control">
+                              </div>
+                        </div>
+
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                           <button type="submit" class="btn btn-primary">Submit</button>
                         </div>

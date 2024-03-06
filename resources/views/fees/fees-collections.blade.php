@@ -91,9 +91,7 @@
                                        @endif 
                                      </td>
                                     <td>
-                                        <div class="d-flex">
-                                            <button class="btn btn-sm btn-warning" wire:click.prevent="receivedPayment({{$data->phone}})"> <i class="fa-duotone fa-file-invoice-dollar"></i></button>    
-                                        </div>
+                                          <a class="btn btn-warning btn-a" href="{{ route('fees.create',$data->id) }}"><i class="fa fa-file-invoice-dollar"></i> Recived payment</a>   
                                     </td>
                                 </tr>
                                 @endforeach

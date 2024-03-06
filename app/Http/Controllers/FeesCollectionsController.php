@@ -11,13 +11,15 @@ use DB;
 
 class FeesCollectionsController extends AdminBaseController
 {
-    public function index()
+    public function FeesCollections()
     {
+
         $collections = User::join('fees', 'users.id', '=', 'fees.user_id')
-        ->select('users.name', 'users.phone', DB::raw('MAX(fees.expiry) as latest_expiry'))
+        ->select('users.id','users.name', 'users.phone', DB::raw('MAX(fees.expiry) as latest_expiry'))
         ->addSelect(DB::raw('(SELECT amount FROM fees WHERE fees.user_id = users.id ORDER BY id DESC LIMIT 1) AS amount'))
         ->groupBy('users.id')
         ->get();
+
     
         return view('fees.fees-collections', ['collections' => $collections]);
     }

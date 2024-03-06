@@ -12,18 +12,17 @@ class FeesController extends Controller
 {
     public function create($id)
     {
-    
-
-            $members = User::whereHas('roles', function($q){
+            $member = User::whereHas('roles', function($q){
                 $q->where('name', 'Member');
             })->where('id', $id)->orderBy('id','DESC')->first();
-
-            $lastSubscription = DB::table('fees')->where('user_id', $members->id)
+            
+            $lastSubscription = DB::table('fees')->where('user_id', $member->id)
                 ->select(DB::raw('MAX(expiry) as latest_expiration'))
                 ->first();
+                
             
             $currentDate = Carbon::now();
-
+            
             if (isset($lastSubscription->latest_expiration)) {
                 $lastExp = $lastSubscription->latest_expiration;
                 $timeLeft = $currentDate->diffInDays($lastExp);
@@ -32,7 +31,7 @@ class FeesController extends Controller
             }
         
         return view('fees.create', [
-            'member' => $members,
+            'member' => $member,
             'latestSubscription' => $lastSubscription,
             'timeLeft' => $timeLeft
         ]);

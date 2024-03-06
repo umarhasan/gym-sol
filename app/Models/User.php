@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'dob',
         'fees',
         'image',
+       'profile',
         'is_active',
         'club_id',
         'is_welcome_msg_sent',
@@ -59,6 +60,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    public function Fees()
+    {
+        return $this->hasOne(\App\Models\Fees::class,'user_id');
+    }
 
     public function department()
     {

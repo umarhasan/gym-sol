@@ -37,59 +37,34 @@
               <div class="col-12">
                 <div class="card">
                   <div class="card-header">
-                    <form method="post" class="" action="{{ route('member.update', $user->id) }}"> <!-- Change the route to update -->
+                  <form method="POST" action="{{ route('expenses.update', $expense->id) }}">
                       @csrf
-                      @method('PUT') <!-- Use PUT method for updating -->
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Name:</strong>
-                            <input class="form-control" name="name" value="{{ $user->name }}" required> <!-- Populate existing name -->
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Email:</strong>
-                            <input class="form-control" type="email" name="email" value="{{ $user->email }}" required> <!-- Populate existing email -->
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Password:</strong>
-                            <input class="form-control" type="password" name="password" placeholder="Enter new password"> <!-- Password field -->
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Confirm Password:</strong>
-                            <input class="form-control" type="password" name="confirm_password" placeholder="Confirm new password"> <!-- Confirm password field -->
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Role:</strong>
-                            <select name="role" class="form-control" required> <!-- Role field -->
-                              @foreach($roles as $role)
-                              <option value="{{ $role->name }}" @if($userRole == $role->name) selected @endif>{{ $role->name }}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Department:</strong>
-                            <select name="department" class="form-control" required> <!-- Department field -->
-                              @foreach($departments as $department)
-                              <option value="{{ $department->id }}" @if($user->department_id == $department->id) selected @endif>{{ $department->name }}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                          <button type="submit" class="btn btn-primary">Update</button> <!-- Change button text to Update -->
-                        </div>
+                      @method('PUT')
+                      <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount" value="{{ $expense->amount }}" required>
                       </div>
+                      <div class="form-group">
+                        <label for="expense_by">Expense By</label>
+                        <input type="text" class="form-control" id="expense_by" name="expense_by" value="{{ $expense->expense_by }}" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="expense_by">Paid to</label>
+                        <input type="text" class="form-control" id="paid_to" name="paid_to" value="{{ $expense->paid_to }}" required>
+                      </div>
+                      <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" class="form-control" id="date" name="date" va;ie="{{ $expense->date }}">
+                          </div>
+                      <div class="form-group">
+                        <label for="details">Details</label>
+                        <textarea class="form-control" id="details" name="details" rows="3" required>{{ $expense->details }}</textarea>
+                      </div>
+                      <!-- Add more fields as necessary -->
+
+                      <button type="submit" class="btn btn-primary">Update</button>
                     </form>
+
                   </div>
                 </div> 
               </div>   

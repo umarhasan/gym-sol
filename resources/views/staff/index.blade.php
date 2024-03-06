@@ -66,7 +66,7 @@
                                   <a class="btn btn-primary btn-a" href="{{ route('staff.edit',$user->id) }}">Edit</a> &nbsp;   
                                 @endcan
                                 @can('user-permission')
-                                  <a class="btn btn-primary btn-a" href="{{ route('staff.permission',$user->id) }}">User Permission</a>    
+                                  <a class="btn btn-primary btn-a" href="{{ route('users.permission',$user->id) }}"> Permission</a>    
                                 @endcan
                                 @can('user-delete')
                                 <form method="post" action="{{route('staff.destroy',$user->id)}}">

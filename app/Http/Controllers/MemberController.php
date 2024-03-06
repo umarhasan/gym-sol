@@ -21,7 +21,7 @@ class MemberController extends AdminBaseController
     public function index(Request $request)
     {
         if (Auth::user()->is_admin) {
-            $data = User::whereHas('roles', function($q){
+            $data = User::with('Fees')->whereHas('roles', function($q){
                 $q->where('name', 'Member');
             })->orderBy('id','DESC')->get();
         } else {
@@ -34,12 +34,13 @@ class MemberController extends AdminBaseController
     }
     public function create()
     {
-        //  $roles = Role::select(['id','name'])->get();
+        $departments = Department::get();
          $roles = Role::select(['id', 'name'])->where('name', 'member')->get();
         return view('member.create',compact('roles','departments'));
     }
     public function store(Request $request)
     {
+        
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -47,13 +48,37 @@ class MemberController extends AdminBaseController
             'roles' => 'required'
         ]);
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $input['created_by'] = Auth::user()->id;
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->phone = $request->phone;
+        $user->dob = $request->dob;
+        $user->fees = $request->fees;
+        $user->gender = $request->gender;
+        $user->club_id = Auth::user()->id;
+        $user->created_by = Auth::user()->id;
 
-        // Create the user
-        $user = User::create($input);
+        if ($request->hasFile('profile')) {
+            $file = $request->file('profile');
+            $fileName = $file->getClientOriginalName() . time() . "Hatch-social." . $file->getClientOriginalExtension();
+            $file->move('uploads/member/profile/', $fileName);
+            $user->profile = $fileName;
+        }
+
+        $user->save();
+
         $user->assignRole($request->input('roles'));
+        
+        $fees = new Fees();
+        $fees->user_id = $user->id;
+        $fees->amount = $request->fees;
+        $fees->date = now();
+        $fees->expiry = ($request->fees > 0) ? Carbon::parse($request->expiry) : now();
+        $fees->club_id = Auth::user()->id;
+        $fees->invoice_url = strtoupper(str_replace(' ', '_', $request->name) . '_' . Carbon::now()->format('F-H:i'));
+        $fees->save();
+        
         return redirect()->route('member.index')->with('success', 'User created successfully');
     }
     public function show($id)
@@ -68,7 +93,7 @@ class MemberController extends AdminBaseController
     }
     public function edit($id)
     {
-        $data['user'] = User::find($id);
+        $data['user'] = User::with('Fees')->find($id);
         $data['roles'] = Role::select(['id', 'name'])->where('name', 'member')->get();
         $data['userRole'] = $data['user']->roles->pluck('name','name')->all();
         return view('member.edit',$data);

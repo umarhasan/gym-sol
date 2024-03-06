@@ -24,6 +24,7 @@ use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\LeadsController;
@@ -87,8 +88,10 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('leadSources', LeadSourcesController::class);
     Route::resource('member', MemberController::class);
     Route::resource('fees', FeesController::class);
+    Route::resource('expenses', ExpensesController::class);
+    
     Route::get('fees/create/{id}', [FeesController::class,'create'])->name('fees.create');
-    Route::get('fees/collections', [FeesCollectionsController::class,'index'])->name('fees-collections');
+    Route::get('fees-collections', [FeesCollectionsController::class,'FeesCollections'])->name('fees-collections');
 
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
     Route::resource('staff', StaffController::class);

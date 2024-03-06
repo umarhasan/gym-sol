@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('content')
 <div class="main-panel">
   <div class="content-wrapper">
@@ -11,12 +10,12 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1>Member Management</h1>
+                <h1>Expenses</h1>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active">Member Management</li>
+                  <li class="breadcrumb-item active">Expenses Management</li>
                 </ol>
               </div>
             </div>
@@ -26,110 +25,165 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Member List</h3>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <div class="pull-right">
-                      @can('member-create')
-                        <a class="btn btn-primary" style="margin-bottom:5px" href="{{ route('member.create') }}"> + Add Member</a>
-                      @endcan
-                    </div>
-                    <!-- <table id="example1" class="table table-bordered table-striped"> -->
-                    <table id="order-listing" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
-                      <thead>
-                        <tr>
-                          <th>S.No</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Phone</th>
-                          <th>Fees</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @if($data)
-                        @php
-                        $id =1;
-                        @endphp
-                        @foreach($data as $key => $user)
-                        <tr>
-                          <td>{{$id++}}</td>
-                          <td>{{ $user->name }}</td>
-                          <td>{{ $user->email }}</td>
-                          <td>{{ $user->phone }}</td>
-                          <td>{{ $user->fees }}</td>
-                          <td>
-                          @php 
-                                $currentYear = date('Y');
-                                $memberSubscription = DB::table('fees')
-                                ->whereYear('expiry', $currentYear)
-                                ->where('user_id',$user->id)
-                                ->select(DB::raw('MAX(expiry) as latest_expiration'))
-                                ->first();
+              <div class="mb-3">
+                  <a href="{{ route('expenses.create') }}" class="btn btn-primary">Add Expense</a>
+                </div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="today-tab" data-toggle="tab" href="#today" role="tab" aria-controls="today" aria-selected="true">Today</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="last_7_days-tab" data-toggle="tab" href="#last_7_days" role="tab" aria-controls="last_7_days" aria-selected="false">Last 7 Days</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="months-tab" data-toggle="tab" href="#months" role="tab" aria-controls="months" aria-selected="false">Months</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
 
-                                if(isset($memberSubscription)) {
-                                    $expired = Carbon\Carbon::now()->gte(Carbon\Carbon::parse($memberSubscription->latest_expiration));
-                                }    
-                            @endphp
-                            @if(isset($memberSubscription->latest_expiration))
-                            @if ($expired)
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-danger">
-                                <i class="fa-duotone fa-clock mr-1 text-danger"></i> &nbsp; Subscription has expired.
-                              </span>
-                            @else
-                            @if(Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration))<=8)
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-warning">
-                              <i class="fa-duotone fa-clock mr-1 text-warning"></i> &nbsp; Subscription will expire in {{  Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days
-                              </span>
-                            @elseif(Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration))>8)
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-primary">
-                                  <i class="fa-duotone fa-clock mr-1 text-primary"></i> &nbsp; 
-                                  Subscription will expire in {{  Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days.
-                              </span>   
-                              @else
-                                  <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-light">
-                                      <i class="fa-duotone fa-clock mr-1 text-light"></i> &nbsp; Not Paid Yet!
-                              </span>
-                              @endif
-                            @endif
-                          @else
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-light">
-                                  <i class="fa-duotone fa-clock mr-1 text-light"></i> &nbsp; Not Paid Yet!
-                            </span>
-                          @endif 
-                          </td>
-                          <td>
-                            <div class="btn-group">
-                            <a class="btn btn-warning btn-a" href="{{ route('member.profile',$user->id) }}"><i class="fa fa-eye"></i></a> &nbsp;   
-                            
-                              @can('member-edit')
-                                <a class="btn btn-primary btn-a" href="{{ route('member.edit',$user->id) }}">Edit</a> &nbsp;   
-                              @endcan
-                              @can('member-delete')
-                                <form method="post" action="{{route('member.destroy',$user->id)}}">
-                                  @csrf
-                                  @method('delete')
-                                    <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
-                                </form>
-                              @endcan
-                            </div>
-                          </td>
-                        </tr>
-                        @endforeach
-                        @endif
-                      </tbody>
-                    </table>
+                  <div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab">
+                    <!-- Today's Expenses Content -->
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Today</h3>
+                      </div>
+                      <!-- /.card-header -->
+                      <div class="card-body">
+                        <table id="today-table" class="table dataTable no-footer" role="grid" aria-describedby="expenses-table_info">
+                         
+                        <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Amount</th>
+                              <th>Details</th>
+                              <th>Date</th>
+                              <th>Invoice URL</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($expensesToday as $expense)
+                              <tr>
+                                <td>{{ $expense->id }}</td>
+                                <td>{{ $expense->amount }}</td>
+                                <td>{{ $expense->details }}</td>
+                                <td>{{ $expense->date }}</td>
+                                <td>{{ $expense->invoice_url }}</td>
+                                <td>
+                                <a class="btn btn-primary btn-a" href="{{ route('expenses.create',$expense->id) }}"><i class="fa fa-edit"></i></a> &nbsp;   
+                                  <form method="post" action="{{route('expenses.destroy',$expense->id)}}">
+                                    @csrf
+                                    @method('delete')
+                                      <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
+                                  </form>
+                                </td>
+                              </tr>
+                            @endforeach
+                          </tbody>
+                        </table> 
+                      </div>
+                    </div>
                   </div>
+
+                  <div class="tab-pane fade" id="last_7_days" role="tabpanel" aria-labelledby="last_7_days-tab">
+                    <!-- Last 7 Days Expenses Content -->
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Last 7 Days</h3>
+                      </div>
+                      <!-- /.card-header -->
+                      <div class="card-body">
+                        <table id="last_7_days-table" class="table dataTable no-footer" role="grid" aria-describedby="expenses-table_info">
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Amount</th>
+                              <th>Details</th>
+                              <th>Date</th>
+                              <th>Invoice URL</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($expensesLast7Days as $expense)
+                              <tr>
+                                <td>{{ $expense->id }}</td>
+                                <td>{{ $expense->amount }}</td>
+                                <td>{{ $expense->details }}</td>
+                                <td>{{ $expense->date }}</td>
+                                <td>{{ $expense->invoice_url }}</td>
+                                <td> 
+                                  <a class="btn btn-primary btn-a" href="{{ route('expenses.edit',$expense->id) }}"><i class="fa fa-edit"></i></a> &nbsp;   
+                                  <form method="post" action="{{route('expenses.destroy',$expense->id)}}">
+                                    @csrf
+                                    @method('delete')
+                                      <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
+                                  </form>
+                                </td>
+                              </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="months" role="tabpanel" aria-labelledby="months-tab">
+                    <!-- Months Expenses Content -->
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Months</h3>
+                      </div>
+                      <!-- /.card-header -->
+                      <div class="card-body">
+                        <table id="months-table" class="table dataTable no-footer" role="grid" aria-describedby="expenses-table_info">
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Amount</th>
+                              <th>Details</th>
+                              <th>Date</th>
+                              <th>Invoice URL</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($expenses as $expense)
+                              <tr>
+                                <td>{{ $expense->id }}</td>
+                                <td>{{ $expense->amount }}</td>
+                                <td>{{ $expense->details }}</td>
+                                <td>{{ $expense->date }}</td>
+                                <td>{{ $expense->invoice_url }}</td>
+                                <td> <a class="btn btn-primary btn-a" href="{{ route('expenses.edit',$expense->id) }}"><i class="fa fa-edit"></i></a> &nbsp;   
+                                  <form method="post" action="{{route('expenses.destroy',$expense->id)}}">
+                                    @csrf
+                                    @method('delete')
+                                      <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
+                                  </form></td>
+                              </tr>
+                            @endforeach
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
         </section>
+      </div>
     </div>
   </div>
-</div>
+
+<script>
+  $(document).ready(function() {
+    $('#today-table').DataTable();
+    $('#last_7_days-table').DataTable();
+    $('#months-table').DataTable();
+  });
+</script>
+
 @endsection

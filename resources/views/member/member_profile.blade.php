@@ -130,7 +130,7 @@
                         <!-- Left Column - Member Details -->
                         <div class="col-xl-4 col-lg-4 col-sm-12 col-md-12">
                             <div class="card overflow-hidden" style="margin-bottom: 10px;">
-                                <div class="text-center p-3 overlay-box" style="background-image: url({{ asset('assets/images/big/img1.jpg') }});">
+                                <div class="text-center p-3 overlay-box" style="background-image: url({{ asset('assets/images/big/img1.jpg') }});background: #222b34;">
                                     <!-- Profile Photo (commented out) -->
                                     <!-- <div class="profile-photo">
                                         <img src="{{ $member->image != '' ? $member->image : ($member->gender == 'male' ? asset('assets/male-placeholder.jpg') : asset('assets/female-placeholder.jpg')) }}" width="100" class="img-fluid rounded-circle" alt="" />
@@ -201,13 +201,13 @@
                             <div class="card overflow-hidden">
                                 <div class="card-header" id="member-info-card">
                                     <div class="d-flex mr-3 align-items-center">
-                                        <h4 class="fs-20  mb-0">Member Info</h4>
+                                        <h4 class="fs-20 mb-0">Member Info</h4>
                                     </div>
                                 </div>
                                 <div class="card-body p-0 mt-2 px-2">
                                     <div class="row">
                                         <div class="col-md-12 mb-3" style="display: flex; justify-content: center; align-items: center; padding:0px; margin:0px; margin-top: -2%">
-                                            <div class="text-center p-3 overlay-box bg-light" style="width:100%; padding:0px; margin:0px; background-image: url({{ asset('assets/images/big/img1.jpg') }});">
+                                            <div class="text-center overlay-box bg-light" style="width:100%; padding:0px; margin:0px; background-image: url({{ asset('assets/images/big/img1.jpg') }});">
                                                 <!-- Profile Photo (commented out) -->
                                                 <!-- <div class="profile-photo">
                                                     <img src="{{ $member->image!='' ? $member->image : ($member->gender=='male' ? asset('assets/male-placeholder.jpg') : asset('assets/female-placeholder.jpg')) }}" width="100" class="img-fluid rounded-circle" alt="" />
