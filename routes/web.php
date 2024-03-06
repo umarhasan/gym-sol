@@ -34,6 +34,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\FeesController;
 use App\Http\Controllers\FeesCollectionsController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\SettingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,7 +90,10 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('member', MemberController::class);
     Route::resource('fees', FeesController::class);
     Route::resource('expenses', ExpensesController::class);
-    
+    Route::get('club/create', [SettingController::class,'create'])->name('club.create');
+    Route::get('/club/settings', [SettingController::class, 'createOrUpdate'])->name('club.settings.createOrUpdate');
+    Route::post('/club/settings', [SettingController::class, 'createOrUpdate']);
+    Route::put('/club/settings/{club_id}', [SettingController::class, 'createOrUpdate'])->name('club.settings.update');
     Route::get('fees/create/{id}', [FeesController::class,'create'])->name('fees.create');
     Route::get('fees-collections', [FeesCollectionsController::class,'FeesCollections'])->name('fees-collections');
 

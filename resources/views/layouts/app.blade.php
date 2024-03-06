@@ -42,7 +42,12 @@
   <div class="container-scroller">
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="index-2.html"><img src="{{asset('/admin')}}/images/logo/logo.png" alt="logo"/></a>
+      
+      @if(auth()->user()->club && auth()->user()->id == auth()->user()->club->user_id)
+          <a class="navbar-brand brand-logo" href="index-2.html"><img src="{{ asset('uploads/club-logo/' . auth()->user()->club->logo) }}" alt="logo"/></a>
+      @else
+          <a class="navbar-brand brand-logo" href="index-2.html"><img src="{{asset('/admin')}}/images/logo/logo.png" alt="logo"/></a>
+      @endif
         <a class="navbar-brand brand-logo-mini" href="index-2.html"><img src="{{asset('/admin')}}/images/logo-mini.svg" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -132,55 +137,55 @@
             </li>
             @endcan
             @can('member-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#member-layouts" aria-expanded="false" aria-controls="member-layouts">
-                <i class="fab fa-trello menu-icon"></i>
-                <span class="menu-title">Member List</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="member-layouts">
-                <ul class="nav flex-column sub-menu">
-                  
-                  <li class="nav-item"> <a class="nav-link" href="{{route('member.index')}}">List Member</a></li>
-                  @can('member-create')
-                  <li class="nav-item"> <a class="nav-link" href="{{route('member.create')}}">Add Member</a></li>
-                  @endcan
-                </ul>
-              </div>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#member-layouts" aria-expanded="false" aria-controls="member-layouts">
+                  <i class="fab fa-trello menu-icon"></i>
+                  <span class="menu-title">Member List</span>
+                  <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="member-layouts">
+                  <ul class="nav flex-column sub-menu">
+                    
+                    <li class="nav-item"> <a class="nav-link" href="{{route('member.index')}}">List Member</a></li>
+                    @can('member-create')
+                    <li class="nav-item"> <a class="nav-link" href="{{route('member.create')}}">Add Member</a></li>
+                    @endcan
+                  </ul>
+                </div>
+              </li>
             @endcan
-           
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#fees-collections-layouts" aria-expanded="false" aria-controls="fees-collections-layouts">
-                <i class="fab fa-trello menu-icon"></i>
-                <span class="menu-title">Fees Collections</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="fees-collections-layouts">
-                <ul class="nav flex-column sub-menu">
-                  
-                  <li class="nav-item"> <a class="nav-link" href="{{route('fees-collections')}}">Fees Collections</a></li>
-                 
-                </ul>
-              </div>
-            </li>
-        
+
+            @can('fees-collection')
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#feescollections-layouts" aria-expanded="false" aria-controls="feescollections-layouts">
+                  <i class="fab fa-trello menu-icon"></i>
+                  <span class="menu-title">Fees Collections</span>
+                  <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="feescollections-layouts">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{route('fees-collections')}}">Fees Collections</a></li>
+                  </ul>
+                </div>
+              </li>
+            @endcan
+
             @can('staff-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#staff-layouts" aria-expanded="false" aria-controls="staff-layouts">
-                <i class="fab fa-trello menu-icon"></i>
-                <span class="menu-title">Staff List</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="staff-layouts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{route('staff.index')}}">List staff</a></li>
-                  @can('staff-create')
-                  <li class="nav-item"> <a class="nav-link" href="{{route('staff.create')}}">Add staff</a></li>
-                  @endcan
-                </ul>
-              </div>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#staff-layouts" aria-expanded="false" aria-controls="staff-layouts">
+                  <i class="fab fa-trello menu-icon"></i>
+                  <span class="menu-title">Staff List</span>
+                  <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="staff-layouts">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{route('staff.index')}}">List staff</a></li>
+                    @can('staff-create')
+                    <li class="nav-item"> <a class="nav-link" href="{{route('staff.create')}}">Add staff</a></li>
+                    @endcan
+                  </ul>
+                </div>
+              </li>
             @endcan
             @can('attendance-list')
             <li class="nav-item">
@@ -200,34 +205,6 @@
               </div>
             </li>
             @endcan
-            @can('leads-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#leads-layouts" aria-expanded="false" aria-controls="leads-layouts">
-                <i class="fab fa-trello menu-icon"></i>
-                <span class="menu-title">Leads</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="leads-layouts">
-                <ul class="nav flex-column sub-menu">
-                    @can('leads-status-list')
-                      <li class="nav-item"> <a class="nav-link" href="{{route('leadStatus.index')}}">Leads Status</a></li>
-                    @endcan
-                    @can('leads-sources-list')
-                      <li class="nav-item"><a class="nav-link" href="{{route('leadSources.index')}}">Lead Sources</a></li>
-                    @endcan
-                    @can('leads-list')
-                      <li class="nav-item"> <a class="nav-link" href="{{route('leads.index')}}">Leads</a></li>
-                    @endcan
-                    @can('leads-pick')
-                    <li class="nav-item"><a class="nav-link" href="{{route('leads.pick')}}">Leads Pick</a></li>
-                    @endcan
-                    @can('leads-invoice')
-                    <li class="nav-item"><a class="nav-link" href="{{route('leads.invoice')}}">Leads Invoice</a></li>
-                    @endcan
-                  </ul>
-              </div>
-            </li>
-            @endcan
             @can('user-list')
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#user-layouts" aria-expanded="false" aria-controls="user-layouts">
@@ -240,40 +217,6 @@
                   <li class="nav-item"> <a class="nav-link" href="{{route('users.index')}}">List Users</a></li>
                   @can('user-create')
                   <li class="nav-item"> <a class="nav-link" href="{{route('users.create')}}">Add User</a></li>
-                  @endcan
-                </ul>
-              </div>
-            </li>
-            @endcan
-            @can('shift-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#shift-layouts" aria-expanded="false" aria-controls="shift-layouts">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Manage Shift</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="shift-layouts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{route('shift.index')}}">List Shift</a></li>
-                  @can('shift-create')
-                  <li class="nav-item"> <a class="nav-link" href="{{route('shift.create')}}">Add Shift</a></li>
-                  @endcan
-                </ul>
-              </div>
-            </li>
-            @endcan
-            @can('leaves-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#leaves-layouts" aria-expanded="false" aria-controls="leaves-layouts">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Manage leaves</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="leaves-layouts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{route('leaves.index')}}">List leaves</a></li>
-                  @can('leaves-create')
-                  <li class="nav-item"> <a class="nav-link" href="{{route('leaves.create')}}">Add leaves</a></li>
                   @endcan
                 </ul>
               </div>
@@ -297,54 +240,36 @@
             </li>
             @endcan        
             @can('client-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#client-layouts" aria-expanded="false" aria-controls="client-layouts">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Manage Client</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="client-layouts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{route('client.index')}}">List Client</a></li>
-                  @can('client-create')
-                  <li class="nav-item"> <a class="nav-link" href="{{route('client.create')}}">Add Client</a></li>
-                  @endcan
-                </ul>
-              </div>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#client-layouts" aria-expanded="false" aria-controls="client-layouts">
+                  <i class="fa fa-users menu-icon"></i>
+                  <span class="menu-title">Manage Client</span>
+                  <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="client-layouts">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{route('client.index')}}">List Client</a></li>
+                    @can('client-create')
+                    <li class="nav-item"> <a class="nav-link" href="{{route('client.create')}}">Add Client</a></li>
+                    @endcan
+                  </ul>
+                </div>
+              </li>
             @endcan
-            @can('project-list')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#project-layouts" aria-expanded="false" aria-controls="project-layouts">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Manage Projects</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="project-layouts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{route('project.index')}}">List Project</a></li>
-                  @can('project-create')
-                  <li class="nav-item"> <a class="nav-link" href="{{route('project.create')}}">Add Project</a></li>
-                  @endcan
-                </ul>
-              </div>
-            </li>
+            @can('settings')
+              <li class="nav-item">
+                  <a class="nav-link" data-toggle="collapse" href="#settings-layouts" aria-expanded="false" aria-controls="settings-layouts">
+                    <i class="fab fa-trello menu-icon"></i>
+                    <span class="menu-title">Settings</span>
+                    <i class="menu-arrow"></i>
+                  </a>
+                  <div class="collapse" id="settings-layouts">
+                    <ul class="nav flex-column sub-menu">
+                      <li class="nav-item"> <a class="nav-link" href="{{route('club.create')}}">Settings</a></li>
+                    </ul>
+                  </div>
+              </li>
             @endcan
-            @can('mail-inbox')
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#mail-layouts" aria-expanded="false" aria-controls="mail-layouts">
-                <i class="fa fa-users menu-icon"></i>
-                <span class="menu-title">Mailbox</span>
-                <i class="menu-arrow"></i>
-              </a>
-              <div class="collapse" id="mail-layouts">
-                <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="{{route('mail.index')}}">Mail</a></li>
-                </ul>
-              </div>
-            </li>
-            @endcan
-
             <li class="nav-item">
             <a href="{{url('/logout')}}" class="nav-link">
                   <i class="fa fa-users menu-icon"></i>

@@ -70,6 +70,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(\App\Models\Department::class,'id','department_id');
     }
 
+    public function club()
+    {
+        return $this->hasOne(\App\Models\Club::class,'user_id');
+    }
+    
     public function permission()
     {
         return $this->belongsToMany(Permission::class);
