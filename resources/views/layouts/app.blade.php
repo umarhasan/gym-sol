@@ -256,6 +256,20 @@
                 </div>
               </li>
             @endcan
+            @can('expenses-list')
+              <li class="nav-item">
+                  <a class="nav-link" data-toggle="collapse" href="#expenses-layouts" aria-expanded="false" aria-controls="expenses-layouts">
+                    <i class="fab fa-trello menu-icon"></i>
+                    <span class="menu-title">Expenses</span>
+                    <i class="menu-arrow"></i>
+                  </a>
+                  <div class="collapse" id="expenses-layouts">
+                    <ul class="nav flex-column sub-menu">
+                      <li class="nav-item"> <a class="nav-link" href="{{route('expenses.index')}}">Expenses</a></li>
+                    </ul>
+                  </div>
+              </li>
+            @endcan
             @can('settings')
               <li class="nav-item">
                   <a class="nav-link" data-toggle="collapse" href="#settings-layouts" aria-expanded="false" aria-controls="settings-layouts">
@@ -270,6 +284,30 @@
                   </div>
               </li>
             @endcan
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#reports-layouts" aria-expanded="false" aria-controls="reports-layouts">
+                  <i class="fab fa-trello menu-icon"></i>
+                  <span class="menu-title">Reports</span>
+                  <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="reports-layouts">
+                  <ul class="nav flex-column sub-menu">
+                    @can('unpaid-members')
+                      <li class="nav-item"> <a class="nav-link" href="{{route('members.unpaid')}}">Unpaid Members</a></li>
+                    @endcan
+                    @can('expired-members')
+                      <li class="nav-item"> <a class="nav-link" href="{{route('members.expired')}}">Expired Members</a></li>
+                    @endcan
+                    @can('soon-expire-members')
+                      <li class="nav-item"> <a class="nav-link" href="{{route('members.expired.soon')}}"> Expiring Soon ( 1-8 Days) </a></li>
+                    @endcan
+                    @can('collections-history')
+                      <li class="nav-item"> <a class="nav-link" href="{{route('collections.history')}}"> Collection History </a></li>
+                    @endcan
+
+                  </ul>
+                </div>
+              </li>
             <li class="nav-item">
             <a href="{{url('/logout')}}" class="nav-link">
                   <i class="fa fa-users menu-icon"></i>

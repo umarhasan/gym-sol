@@ -74,7 +74,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-primary text-white"> GYM Name </span>
                                 </div>
-                                <input type="text" name="gym_name" style="height: 55px !important" class="form-control form-control-sm {{ $errors->has('gym_name') ? 'is-invalid' : (strlen($club->gym_name)>0 ? 'is-valid' : null) }}" placeholder="GYM Name" wire:model="gym_name" value="{{ old('gym_name', isset($club) ? $club->gym_name : '') }}">
+                                <input type="text" name="gym_name" style="height: 55px !important" class="form-control form-control-sm {{ $errors->has('gym_name') ? 'is-invalid' : (strlen(isset($club) ? $club->gym_name : '')>0 ? 'is-valid' : null) }}" placeholder="GYM Name" wire:model="gym_name" value="{{ old('gym_name', isset($club) ? $club->gym_name : '') }}">
                                 <br>
                                 @error('gym_name')
                                 <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -84,7 +84,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-primary text-white"> GYM Title </span>
                                 </div>
-                                <input type="text" name="gym_title" style="height: 55px !important" class="form-control form-control-sm {{ $errors->has('gym_title') ? 'is-invalid' : (strlen($club->gym_title)>0 ? 'is-valid' : null) }}" placeholder="GYM Title" wire:model="gym_title" value="{{ old('gym_title', isset($club) ? $club->gym_title : '') }}">
+                                <input type="text" name="gym_title" style="height: 55px !important" class="form-control form-control-sm {{ $errors->has('gym_title') ? 'is-invalid' : (strlen(isset($club) ? $club->gym_title : '')>0 ? 'is-valid' : null) }}" placeholder="GYM Title" wire:model="gym_title" value="{{ old('gym_title', isset($club) ? $club->gym_title : '') }}">
                                 @error('gym_title')
                                     <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
                                 @enderror
@@ -95,7 +95,7 @@
                             <div class="input-group-prepend">
                                     <span class="input-group-text bg-primary text-white"> City </span>
                                 </div>
-                                <input type="text" name="city" style="height: 55px !important" class="form-control form-control-sm {{ $errors->has('city') ? 'is-invalid' : (strlen($club->city)>0 ? 'is-valid' : null) }}" placeholder="GYM Title" wire:model="city" value="{{ old('city', isset($club) ? $club->city : '') }}">
+                                <input type="text" name="city" style="height: 55px !important" class="form-control form-control-sm {{ $errors->has('city') ? 'is-invalid' : (strlen(isset($club) ? $club->city : '')>0 ? 'is-valid' : null) }}" placeholder="GYM Title" wire:model="city" value="{{ old('city', isset($club) ? $club->city : '') }}">
                                 @error('City')
                                     <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
                                 @enderror
@@ -115,7 +115,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-primary text-white"> Location </span>
                                     </div>
-                                    <textarea name="location" class="form-control form-control-sm {{ $errors->has('location') ? 'is-invalid' : (strlen($club->location)>0 ? 'is-valid' : null) }}" cols="30" rows="4" placeholder="Location" wire:model="location" value="{{ old('location', isset($club) ? $club->location : '') }}">{{ isset($club) ? $club->location : '' }}</textarea>
+                                    <textarea name="location" class="form-control form-control-sm {{ $errors->has('location') ? 'is-invalid' : (strlen(isset($club) ? $club->location : '')>0 ? 'is-valid' : null) }}" cols="30" rows="4" placeholder="Location" wire:model="location" value="{{ old('location', isset($club) ? $club->location : '') }}">{{ isset($club) ? $club->location : '' }}</textarea>
                                     @error('location')
                                     <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
                                 @enderror
@@ -127,7 +127,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-primary text-white"> Address </span>
                                     </div>
-                                    <textarea name="address" class="form-control form-control-sm {{ $errors->has('address') ? 'is-invalid' : (strlen($club->address)>0 ? 'is-valid' : null) }}" cols="30" rows="4" placeholder="Address" wire:model="location" value="{{ old('address', isset($club) ? $club->address : '') }}">{{ isset($club) ? $club->address : '' }}</textarea>
+                                    <textarea name="address" class="form-control form-control-sm {{ $errors->has('address') ? 'is-invalid' : (strlen(isset($club) ? $club->address : '')>0 ? 'is-valid' : null) }}" cols="30" rows="4" placeholder="Address" wire:model="location" value="{{ old('address', isset($club) ? $club->address : '') }}">{{ isset($club) ? $club->address : '' }}</textarea>
                                     <br>
                                     @error('address')
                                     <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -136,7 +136,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <textarea name="about" class="form-control form-control-sm {{ $errors->has('about') ? 'is-invalid' : (strlen($club->about)>0 ? 'is-valid' : null) }}" cols="30" rows="6" placeholder="About the GYM (300+ words) " wire:model="about" value="{{ old('about', isset($club) ? $club->about : '') }}">{{ isset($club) ? $club->about : '' }}</textarea>
+                                <textarea name="about" class="form-control form-control-sm {{ $errors->has('about') ? 'is-invalid' : (strlen(isset($club) ? $club->about : '')>0 ? 'is-valid' : null) }}" cols="30" rows="6" placeholder="About the GYM (300+ words) " wire:model="about" value="{{ old('about', isset($club) ? $club->about : '') }}">{{ isset($club) ? $club->about : '' }}</textarea>
                                 @error('about')
                                 <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
                                 @enderror
@@ -155,7 +155,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-primary text-white">Owner Name</span>
                                         </div>
-                                        <input type="text" name="owner_name" class="form-control {{ $errors->has('club->owner_name') ? 'is-invalid' : (strlen($club->owner_name)>0 ? 'is-valid' : null) }}" placeholder="Owner Name" wire:model="owner_name" style="padding: 20px;" value="{{ old('owner_name', isset($club) ? $club->owner_name : '') }}" />
+                                        <input type="text" name="owner_name" class="form-control {{ $errors->has('club->owner_name') ? 'is-invalid' : (strlen(isset($club) ? $club->owner_name : '')>0 ? 'is-valid' : null) }}" placeholder="Owner Name" wire:model="owner_name" style="padding: 20px;" value="{{ old('owner_name', isset($club) ? $club->owner_name : '') }}" />
                                         <br>
                                         @error('owner_name')
                                         <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -165,7 +165,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-primary text-white">Owner Phone</span>
                                         </div>
-                                        <input type="text" name="owner_phone" class="form-control form-control-sm {{ $errors->has('owner_phone') ? 'is-invalid' : (strlen($club->owner_phone)>0 ? 'is-valid' : null) }}" placeholder="Owner Name" wire:model="owner_phone" value="{{ old('owner_phone', isset($club) ? $club->owner_phone : '') }}">
+                                        <input type="text" name="owner_phone" class="form-control form-control-sm {{ $errors->has('owner_phone') ? 'is-invalid' : (strlen(isset($club) ? $club->owner_phone : '')>0 ? 'is-valid' : null) }}" placeholder="Owner Name" wire:model="owner_phone" value="{{ old('owner_phone', isset($club) ? $club->owner_phone : '') }}">
                                         <br> 
                                         @error('owner_phone')
                                         <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -178,7 +178,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-primary text-white">Manager Name</span>
                                         </div>
-                                        <input type="text" name="manager_name" class="form-control form-control-sm {{ $errors->has('manager_name') ? 'is-invalid' : (strlen($club->manager_name)>0 ? 'is-valid' : null) }}" placeholder="Manager Name" wire:model="manager_name" value="{{ old('manager_name', isset($club) ? $club->manager_name : '') }}">
+                                        <input type="text" name="manager_name" class="form-control form-control-sm {{ $errors->has('manager_name') ? 'is-invalid' : (strlen(isset($club) ? $club->manager_name : ' ')>0 ? 'is-valid' : null) }}" placeholder="Manager Name" wire:model="manager_name" value="{{ old('manager_name', isset($club) ? $club->manager_name : '') }}">
                                         <br>
                                         @error('manager_name')
                                             <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -188,7 +188,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-primary text-white">Manager Phone</span>
                                         </div>
-                                        <input type="text" name="manager_phone" class="form-control form-control-sm {{ $errors->has('club->manager_phone') ? 'is-invalid' : (strlen($club->manager_phone)>0 ? 'is-valid' : null) }}" placeholder="Manger Phone" wire:model="manager_phone" value="{{ old('manager_phone', isset($club) ? $club->manager_phone : '') }}">
+                                        <input type="text" name="manager_phone" class="form-control form-control-sm {{ $errors->has('club->manager_phone') ? 'is-invalid' : (strlen(isset($club) ? $club->manager_phone : '')>0 ? 'is-valid' : null) }}" placeholder="Manger Phone" wire:model="manager_phone" value="{{ old('manager_phone', isset($club) ? $club->manager_phone : '') }}">
                                         <br>
                                         @error('manager_phone')
                                             <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -211,7 +211,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-success text-white"><i class="fa-brands fa-whatsapp"></i> &nbsp; Active Whatsapp No</span>
                                         </div>
-                                        <input type="text" name="active_whatsapp_no" class="form-control form-control-sm {{ $errors->has('active_whatsapp_no') ? 'is-invalid' : (strlen($club->active_whatsapp_no)>0 ? 'is-valid' : null) }}" placeholder="Active Whatsapp No" wire:model="active_whatsapp_no" value="{{ old('active_whatsapp_no', isset($club) ? $club->active_whatsapp_no : '') }}">
+                                        <input type="text" name="active_whatsapp_no" class="form-control form-control-sm {{ $errors->has('active_whatsapp_no') ? 'is-invalid' : (strlen(isset($club) ? $club->active_whatsapp_no : '')>0 ? 'is-valid' : null) }}" placeholder="Active Whatsapp No" wire:model="active_whatsapp_no" value="{{ old('active_whatsapp_no', isset($club) ? $club->active_whatsapp_no : '') }}">
                                         <br>
                                         @error('active_whatsapp_no')
                                             <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
@@ -241,20 +241,22 @@
                       <div class="card-body" style="margin:0px !important; padding:0px !important;">
                           <br>
                           <div class="form-group" style="display:flex; justify-content: center; align-items: center">
-                              <img src="{{ asset('uploads/club-logo/' . $club->logo) }}" alt="favicon" alt="logo" style="width:130px; height: 90px;" class="img img-fluid  img-rounded img-circle">    
+                           @if($club && $club->logo)
+                                <img src="{{ asset('uploads/club-logo/' . $club->logo) }}" alt="logo" style="width:130px; height: 90px;" class="img img-fluid img-rounded img-circle">
+                            @else
+                                <img src="{{ asset('path_to_default_logo_if_not_found.jpg') }}" alt="Default Logo" style="width:130px; height: 90px;" class="img img-fluid img-rounded img-circle">
+                            @endif 
                           </div>
 
                           <div class="input-group input-group-sm mb-3">
                               <div class="input-group-prepend">
                                       <span class="input-group-text bg-primary text-white"> Logo </span>
                               </div>
-                              <input type="file" name="logo" class="form-control form-control-sm {{ $errors->has('logo') ? 'is-invalid' : (strlen($club->logo)>0 ? 'is-valid' : null) }}" placeholder="logo" wire:model="logo">
+                              <input type="file" name="logo" class="form-control form-control-sm {{ $errors->has('logo') ? 'is-invalid' : (strlen(isset($club) ? $club->logo : '')>0 ? 'is-valid' : null) }}" placeholder="logo" wire:model="logo">
                               @error('logo')
                               <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
                               @enderror
                           </div>
-
-
                       </div>
 
                       <div class="card-header">
@@ -265,14 +267,18 @@
                       <div class="card-body" style="margin:0px !important; padding:0px !important;">
                           <br>
                           <div class="form-group" style="display:flex; justify-content: center; align-items: center">
-                           <img src="{{ asset('uploads/club-favicon/' . $club->favicon) }}" alt="favicon" alt="logo" style="width:130px; height: 90px;" class="img img-fluid  img-rounded img-circle">    
+                          @if($club && $club->logo)
+                            <img src="{{ asset('uploads/club-favicon/' . $club->favicon) }}" alt="favicon" alt="logo" style="width:130px; height: 90px;" class="img img-fluid  img-rounded img-circle">    
+                            @else
+                                <img src="{{ asset('path_to_default_logo_if_not_found.jpg') }}" alt="Default Logo" style="width:130px; height: 90px;" class="img img-fluid img-rounded img-circle">
+                            @endif 
                           </div>
 
                           <div class="input-group input-group-sm mb-3">
                               <div class="input-group-prepend">
                                     <span class="input-group-text bg-primary text-white"> favicon </span>
                               </div>
-                              <input type="file" name="favicon" class="form-control form-control-sm {{ $errors->has('favicon') ? 'is-invalid' : (strlen($club->favicon)>0 ? 'is-valid' : null) }}" placeholder="logo" wire:model="logo">
+                              <input type="file" name="favicon" class="form-control form-control-sm {{ $errors->has('favicon') ? 'is-invalid' : (strlen(isset($club) ? $club->favicon : '')>0 ? 'is-valid' : null) }}" placeholder="logo" wire:model="logo">
                               @error('logo')
                               <span class="text text-danger text-invalid text-bold"> {{$message}} </span>
                               @enderror

@@ -35,6 +35,7 @@ use App\Http\Controllers\FeesController;
 use App\Http\Controllers\FeesCollectionsController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ReportsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -96,7 +97,14 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::put('/club/settings/{club_id}', [SettingController::class, 'createOrUpdate'])->name('club.settings.update');
     Route::get('fees/create/{id}', [FeesController::class,'create'])->name('fees.create');
     Route::get('fees-collections', [FeesCollectionsController::class,'FeesCollections'])->name('fees-collections');
-
+    // Reports
+    Route::get('unpaid-members', [ReportsController::class,'UnpaidMembers'])->name('members.unpaid');
+    Route::get('expired-members', [ReportsController::class,'ExpiredMembers'])->name('members.expired');
+    Route::get('soon-expire-members', [ReportsController::class,'SoonToExpireMembers'])->name('members.expired.soon');
+    Route::get('collections-history', [ReportsController::class,'CollectionHistory'])->name('collections.history');
+    Route::get('attendance-history', [ReportsController::class,'AttendanceHistory'])->name('attendance.history');
+    Route::get('expenses-reports', [ReportsController::class,'ExpensesReport'])->name('expenses.reports');
+    // End Reports
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
     Route::resource('staff', StaffController::class);
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');
