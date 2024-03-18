@@ -36,6 +36,7 @@ use App\Http\Controllers\FeesCollectionsController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\InvoiceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -90,6 +91,10 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('leadSources', LeadSourcesController::class);
     Route::resource('member', MemberController::class);
     Route::resource('fees', FeesController::class);
+
+
+    Route::get('invoice/{invoice_url}', [InvoiceController::class,'show'])->name('member.invoice');
+   
     Route::resource('expenses', ExpensesController::class);
     Route::get('club/create', [SettingController::class,'create'])->name('club.create');
     Route::get('/club/settings', [SettingController::class, 'createOrUpdate'])->name('club.settings.createOrUpdate');

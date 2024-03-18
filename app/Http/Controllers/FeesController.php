@@ -37,8 +37,14 @@ class FeesController extends Controller
         ]);
     }
 
-    public function takeFee(Request $request)
+    public function store(Request $request)
     {
+        
+        $selectedMonths = $request->date;
+
+        // Calculating the expiry date by adding the selected number of months to the current date
+        $expiryDate = Carbon::now()->addMonths($selectedMonths)->format('Y-m-d');
+
         $string = $request->name . '-' . Carbon::now()->format('F-H:i');
         $invoice_url = strtoupper($string);
 
@@ -48,11 +54,10 @@ class FeesController extends Controller
             'notification_days' => $request->notification_days,
             'remaining_days' => $request->remaining_days,
             'date' => Carbon::now()->format('Y-m-d'),
-            'expiry' => $request->date,
+            'expiry' => $expiryDate,
             'invoice_url' => $invoice_url,
-            'club_id' => $request->club_id,
+            'club_id' => Auth::user()->club_id,
         ]);
-
         return redirect()->route('member.invoice', ['invoice_url' => $invoice_url]);
     }
 
