@@ -30,8 +30,7 @@ class InvoiceController extends Controller
                 $dompdf = new Dompdf();
                 $dompdf->loadHtml(view('invoice_pdf', ['clubSetting' => $setting, 'data' => $data])->render());
                 $dompdf->setPaper('A4', 'portrait');
-                $dompdf->render();
-                // dd($dompdf);
+                $dompdf->render();          
                 // file_put_contents($pdfPath, $dompdf->output());
             }
         } catch (\Throwable $th) {
@@ -56,7 +55,7 @@ class InvoiceController extends Controller
                 $dompdf->loadHtml(view('invoice_pdf', ['clubSetting' => $setting, 'data' => $data])->render());
                 $dompdf->setPaper('A4', 'portrait');
                 $dompdf->render();
-                file_put_contents($pdfPath, $dompdf->output());
+                // file_put_contents($pdfPath, $dompdf->output());
             }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Failed to generate the PDF. Error: ' . $th->getMessage());
