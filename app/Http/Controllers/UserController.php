@@ -19,10 +19,10 @@ class UserController extends AdminBaseController
     {
         if (Auth::user()->is_admin) {
             // If admin, get all users
-            $data = User::orderBy('id', 'DESC')->orderBy('id','DESC')->get();
+            $data = User::orderBy('id', 'DESC')->orderBy('id','DESC')->paginate(10);
         } else {
             // If regular user, get only their data
-            $data = User::where('created_by', Auth::id())->orderBy('id','DESC')->get();
+            $data = User::where('created_by', Auth::id())->orderBy('id','DESC')->paginate(10);
         }
         return view('users.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);

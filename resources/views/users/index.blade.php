@@ -37,8 +37,7 @@
                         <a class="btn btn-primary" style="margin-bottom:5px" href="{{ route('users.create') }}"> + Add User</a>
                       @endcan
                     </div>
-                    <!-- <table id="example1" class="table table-bordered table-striped"> -->
-                    <table id="order-listing" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
+                    <table id="abc" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
                       <thead>
                         <tr>
                           <th>S.No</th>
@@ -88,13 +87,44 @@
                         @endif
                       </tbody>
                     </table>
+                        {{ $data->appends(request()->input())->links('pagination::bootstrap-4') }}
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
         </section>
     </div>
   </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#abc').DataTable({
+            "paging": true, // Pagination on
+            //"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ], // Rows per page menu
+            "searching": true, // Search bar on
+            "ordering": true, // Sorting on
+            "info": true, // Table information (records shown, etc.)
+            "autoWidth": false, // Automatic column width calculation off
+            // Custom language settings
+            //"language": {
+                "lengthMenu": "Display _MENU_ records per page",
+                "zeroRecords": "No matching records found",
+                "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                "infoEmpty": "Showing 0 to 0 of 0 entries",
+                "infoFiltered": "(filtered from _MAX_ total records)",
+                "search": "Search:",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "Next",
+                    "previous": "Previous"
+                }
+            }
+        });
+    });
+</script>
 @endsection
