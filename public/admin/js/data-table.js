@@ -10,7 +10,7 @@
             "language": {
                 search: ""
             },
-            // "paging": false // Disable paging
+            "paging": false // Disable paging
         });
 
         $('#todayTable').DataTable({

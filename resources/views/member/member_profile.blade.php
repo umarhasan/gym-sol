@@ -149,7 +149,7 @@
                                                     Subscription will expire in {{ $timeLeft }} days
                                                 </span>
                                                 <br>
-                                                <a href="https://wa.me/{{ $member->phone }}?text=Your subscription is expiring soon. Please renew to continue enjoying our services." type="button" class="btn btn-success btn-xs waves-effect btn-label waves-light" style="font-size: 12px; marginn-top: 1.5px;"><i class="fa-brands fa-whatsapp label-icon"></i> Notify</a>
+                                                <!--<a href="https://wa.me/{{ $member->phone }}?text=Your subscription is expiring soon. Please renew to continue enjoying our services." type="button" class="btn btn-success btn-xs waves-effect btn-label waves-light" style="font-size: 12px; marginn-top: 1.5px;"><i class="fa-brands fa-whatsapp label-icon"></i> Notify</a>--!>
 
                                             @elseif(Carbon\Carbon::parse($latestSubscription->latest_expiration)->gte(Carbon\Carbon::now()))
                                                 <span class="badge light badge-primary" style="width: 100%;">
@@ -174,23 +174,17 @@
                                 </ul>
                                 <div class="card-footer pt-0 pb-0 text-center" style="margin-bottom: 2%;">
                                     <div class="row">
-                                        <div class="col-4 pt-3 pb-3">
+                                        <div class="col-2 pt-3 pb-3">
+                                            
+                                        </div>
+                                        <div class="col-8 pt-3 pb-3">
                                             <a href="https://wa.me/{{ $member->phone }}?text=message text">
                                                 <h3 class="mb-1"><i class="fa-brands fa-whatsapp"></i></h3>
                                                 <span>whatsapp</span>
                                             </a>
                                         </div>
-                                        <div class="col-4 pt-3 pb-3">
-                                            <a href="sms:{{ $member->phone }}">
-                                                <h3 class="mb-1"><i class="fa-duotone fa-comment-sms"></i></h3>
-                                                <span>SMS</span>
-                                            </a>
-                                        </div>
-                                        <div class="col-4 pt-3 pb-3">
-                                            <a href="https://wa.me/{{ $member->phone }}">
-                                                <h3 class="mb-1"><i class="fa-duotone fa-phone-volume"></i></h3>
-                                                <span>Call</span>
-                                            </a>
+                                        <div class="col-2 pt-3 pb-3">
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -228,7 +222,6 @@
                                                     <th>GENDER</th>
                                                     <th>FEES</th>
                                                     <th>EMAIL</th>
-                                                    <th>PASSWORD</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -240,7 +233,6 @@
                                                     <td>{{ $member->gender }}</td>
                                                     <td>{{ $member->fees }}</td>
                                                     <td>{{ $member->email }}</td>
-                                                    <td>{{ $member->unhash_password }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
