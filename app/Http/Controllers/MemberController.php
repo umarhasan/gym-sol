@@ -23,11 +23,11 @@ class MemberController extends AdminBaseController
         if (Auth::user()->is_admin) {
             $data = User::with('Fees')->whereHas('roles', function($q){
                 $q->where('name', 'Member');
-            })->orderBy('id','DESC')->get();
+            })->orderBy('id','DESC')->paginate(10);
         } else {
             $data = User::whereHas('roles', function($q){
                 $q->where('name', 'Member');
-            })->where('created_by', Auth::id())->orderBy('id','DESC')->get();
+            })->where('created_by', Auth::id())->orderBy('id','DESC')->paginate(10);
         }
         return view('member.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);

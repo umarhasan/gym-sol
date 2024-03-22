@@ -35,7 +35,7 @@ class ExpensesController extends AdminBaseController
             ->where('date', '>=', now()->subDays(7))
             ->orderByDesc('id')
             ->get();
-
+            
         return view('expenses.index', [
             'expenses' => $currentMonth,
             'expensesToday' => $expensesToday,

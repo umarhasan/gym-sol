@@ -81,7 +81,6 @@ class UserController extends AdminBaseController
     {
         $this->validate($request, [
             'name' => 'required',
-            'department_id' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
             'roles' => 'required'

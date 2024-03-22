@@ -2,26 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use DB;
-use Auth;
+
 class FeesTableSeeder extends Seeder
 {
     public function run()
     {
-        // Generate 100 user entries using the factory
-        $userIds = DB::table('users')->pluck('id');
-        $name = DB::table('users')->pluck('name');
+        // Fetching user data
+        $users = DB::table('users')->select('id', 'name', 'fees')->get();
         
-        $fees = DB::table('users')->pluck('fees');
-        $string = str_replace(' ', '_', $name).'_'.Carbon::now()->format('F-H:i');
-        $invoice_url = strtoupper($string);
-        foreach ($userIds as $userId) {
+        // Generate 10,000 entries
+        $timestamp = Carbon::now()->format('F-H:i');
+        for ($i = 0; $i < 10000; $i++) {
+            $user = $users->random(); // Randomly select a user from the fetched data
+            $string = str_replace(' ', '_', $user->name) . '_' . $timestamp;
+            $invoice_url = strtoupper($string);
+            
             DB::table('fees')->insert([
-                'user_id' => $userId,
-                'amount' => $fees,
+                'user_id' => $user->id,
+                'amount' => $user->fees,
                 'notification_days' => 3,
                 'remaining_days' => 3,
                 'date' => Carbon::now()->format('Y-m-d'),

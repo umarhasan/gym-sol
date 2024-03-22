@@ -1,7 +1,16 @@
 @extends('layouts.app')
 
-
 @section('content')
+  <style>
+        .pagination,
+        .jsgrid .jsgrid-pager {
+            display: flex;
+            padding-left: 350px;
+            margin-top: -25px;
+            list-style: none;
+            border-radius: 0.25rem;
+        }
+    </style>
 <div class="main-panel">
   <div class="content-wrapper">
     <div class="row">
@@ -34,7 +43,7 @@
                   <div class="card-body">
                     
                     <!-- <table id="example1" class="table table-bordered table-striped"> -->
-                    <table id="order-listing" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
+                    <table id="example" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
                       <thead>
                         <tr>
                           <th>S.No</th>
@@ -98,6 +107,7 @@
                         @endif
                       </tbody>
                     </table>
+                    {{ $collections->links('pagination::bootstrap-4') }}
                   </div>
                 </div>
               </div>

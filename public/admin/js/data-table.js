@@ -1,6 +1,54 @@
 (function($) {
     'use strict';
     $(function() {
+        $('#example').DataTable({
+            "aLengthMenu": [
+                [5, 10, 15, -1],
+                [5, 10, 15, "All"]
+            ],
+            "iDisplayLength": 10,
+            "language": {
+                search: ""
+            },
+            // "paging": false // Disable paging
+        });
+
+        $('#todayTable').DataTable({
+            "aLengthMenu": [
+                [5, 10, 15, -1],
+                [5, 10, 15, "All"]
+            ],
+            "iDisplayLength": 10,
+            "language": {
+                search: ""
+            },
+            //  "paging": false // Disable paging
+        });
+
+        $('#last7days').DataTable({
+            "aLengthMenu": [
+                [5, 10, 15, -1],
+                [5, 10, 15, "All"]
+            ],
+            "iDisplayLength": 10,
+            "language": {
+                search: ""
+            },
+            // "paging": false // Disable paging
+        });
+
+        $('#monthTable').DataTable({
+            "aLengthMenu": [
+                [5, 10, 15, -1],
+                [5, 10, 15, "All"]
+            ],
+            "iDisplayLength": 10,
+            "language": {
+                search: ""
+            },
+            // "paging": false // Disable paging
+        });
+
         $('#order-listing').DataTable({
             "aLengthMenu": [
                 [5, 10, 15, -1],
@@ -21,7 +69,8 @@
                 search: ""
             }
         });
-        $('#order-listing').each(function() {
+
+        $('#order-listing, #example, #today, #last7days, #months').each(function() {
             var datatable = $(this);
             // SEARCH - Add the placeholder for Search and Turn this into in-line form control
             var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
