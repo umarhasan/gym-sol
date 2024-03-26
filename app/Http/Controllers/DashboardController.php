@@ -7,9 +7,12 @@ use Auth;
 use Hash;
 use Validator;
 use App\Models\User;
+use App\Models\Fees;
+use App\Models\Expense;
 use App\Models\Order;
 use App\Models\Product;
 use Session;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -22,9 +25,48 @@ class DashboardController extends Controller
     
     public function index()
     {
-        // return Auth::user();
-        $data['users'] = User::all()->count();
-        return view('home',$data);
+        $userId = Auth::id();
+        $isAdmin = Auth::user()->is_admin;
+
+        // Calculate current year and month
+        $currentYear = Carbon::now()->year;
+        $currentMonth = Carbon::now()->month;
+
+        // Initialize an array to store monthly profit and loss
+        $monthlyProfitAndLoss = [];
+
+        // Loop through each month of the current year
+        for ($month = 1; $month <= $currentMonth; $month++) {
+            // Calculate start and end dates of the month
+            $startDate = Carbon::create($currentYear, $month, 1)->startOfMonth();
+            $endDate = Carbon::create($currentYear, $month, 1)->endOfMonth();
+
+            // Calculate profit and loss for the month
+            $fees = $isAdmin ? Fees::whereBetween('created_at', [$startDate, $endDate])->sum('amount') : Fees::where('user_id', $userId)->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+            $expenses = $isAdmin ? Expense::whereBetween('created_at', [$startDate, $endDate])->sum('amount') : Expense::where('user_id', $userId)->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+            $profitAndLoss = $fees - $expenses;
+
+            // Store profit and loss for the month
+            $monthlyProfitAndLoss[$startDate->format('F')] = $profitAndLoss;
+        }
+
+        // Generate chart data using the monthly profit and loss array
+        $chartData = [
+            'labels' => array_keys($monthlyProfitAndLoss),
+            'values' => array_values($monthlyProfitAndLoss),
+        ];
+
+        // Pass chart data and other variables to the view
+        $data = [
+            'totalUsers' => $isAdmin ? User::count() : User::where('created_by', $userId)->count(),
+            'totalMembers' => $isAdmin ? User::whereHas('roles', fn($q) => $q->where('name', 'Member'))->count() : User::whereHas('roles', fn($q) => $q->where('name', 'Member')->where('created_by', $userId))->count(),
+            'totalStaff' => $isAdmin ? User::whereHas('roles', fn($q) => $q->where('name', 'Staff'))->count() : User::whereHas('roles', fn($q) => $q->where('name', 'Staff')->where('created_by', $userId))->count(),
+            'totalFees' => $isAdmin ? Fees::sum('amount') : Fees::where('user_id', $userId)->sum('amount'),
+            'totalExpenses' => $isAdmin ? Expense::sum('amount') : Expense::where('user_id', $userId)->sum('amount'),
+            'profitAndLoss' => $isAdmin ? number_format($fees - $expenses) : number_format($fees - $expenses),
+        ];
+
+        return view('home', compact('data', 'chartData'));
     }
     
     public function profile()
