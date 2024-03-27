@@ -304,7 +304,8 @@
                     @can('collections-history')
                       <li class="nav-item"> <a class="nav-link" href="{{route('collections.history')}}"> Collection History </a></li>
                     @endcan
-
+                    <li class="nav-item"> <a class="nav-link" href="{{route('profit_loss')}}"> Profit and Loss </a></li>
+                    
                   </ul>
                 </div>
               </li>

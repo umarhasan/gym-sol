@@ -15,7 +15,7 @@ class FeesTableSeeder extends Seeder
         
         // Generate 10,000 entries
         $timestamp = Carbon::now()->format('F-H:i');
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $user = $users->random(); // Randomly select a user from the fetched data
             $string = str_replace(' ', '_', $user->name) . '_' . $timestamp;
             $invoice_url = strtoupper($string);

@@ -13,27 +13,29 @@ use Illuminate\Support\Facades\Auth;
 class ReportsController extends Controller
 {
 
-    public $startDate='', $endDate='', $filterBy='weekly';
+    public $startDate = '', $endDate = '', $filterBy = 'weekly';
 
-    public function UnpaidMembers(){
+    public function UnpaidMembers()
+    {
         $currentMonth = now()->format('m');
         $unPaidMembers = User::leftJoin('fees', function ($join) use ($currentMonth) {
-                $join->on('users.id', '=', 'fees.user_id')
-                     ->whereMonth('fees.date', '=', $currentMonth);
-            })
+            $join->on('users.id', '=', 'fees.user_id')
+                ->whereMonth('fees.date', '=', $currentMonth);
+        })
             ->whereNull('fees.id')
             ->select('users.name', 'users.phone', 'users.image', 'users.id as userId', 'fees.*')
             ->where('users.club_id', Auth::user()->club_id)
             ->get();
-            return view('reports.unpaid-members', ['unPaidMembers' => $unPaidMembers]);
+        return view('reports.unpaid-members', ['unPaidMembers' => $unPaidMembers]);
     }
 
-    public function ExpiredMembers(){
-        
+    public function ExpiredMembers()
+    {
+
         $currentYear = now()->year;
 
         $expiredMembers = Fees::join('users', 'users.id', '=', 'fees.user_id')
-            ->select('users.id','users.name', 'users.email', 'users.phone', 'users.image', 'fees.id as fee_id') // Include fees.id in the select list
+            ->select('users.id', 'users.name', 'users.email', 'users.phone', 'users.image', 'fees.id as fee_id') // Include fees.id in the select list
             ->selectRaw('MAX(expiry) as latest_expiration')
             // ->whereYear('expiry', $currentYear)
             ->groupBy('users.id', 'users.name', 'users.email', 'users.phone', 'users.image', 'fee_id') // Group by all selected columns
@@ -44,33 +46,33 @@ class ReportsController extends Controller
         return view('reports.expired-members', ['expiredMembers' => $expiredMembers]);
     }
 
-    public function SoonToExpireMembers(){
+    public function SoonToExpireMembers()
+    {
         $currentYear = now()->year;
-        
+
         $expiredMembers = Fees::select('user_id')
-        ->selectRaw('MAX(expiry) as latest_expiration')
-        ->whereYear('expiry', $currentYear)
-        ->where('club_id', Auth::user()->club_id)
-        ->groupBy('user_id')
-        ->havingRaw('MAX(expiry) <= NOW()') // Adjusted condition to use MAX function
-        ->get();
-        
-    
-    $expiredMembersIds = $expiredMembers->pluck('user_id')->toArray();
-    
-    $expiringSoon = Fees::join('users', 'users.id', '=', 'fees.user_id')
-        ->whereNotIn('user_id', $expiredMembersIds)
-        ->whereYear('expiry', $currentYear)
-        ->select('users.name', 'users.email', 'users.phone', 'users.image')
-        ->selectRaw('MAX(expiry) as latest_expiration')
-        ->groupBy('users.id') // Group by users.id instead of user_id
-        ->havingRaw('DATEDIFF(MAX(expiry), NOW()) > 1')
-        ->havingRaw('DATEDIFF(MAX(expiry), NOW()) <= 8')
-        ->where('fees.club_id', Auth::user()->club_id)
-        ->get();
-    
-    return view('reports.soon-to-expire-members', ['expiringSoon' => $expiringSoon]);
-    
+            ->selectRaw('MAX(expiry) as latest_expiration')
+            ->whereYear('expiry', $currentYear)
+            ->where('club_id', Auth::user()->club_id)
+            ->groupBy('user_id')
+            ->havingRaw('MAX(expiry) <= NOW()') // Adjusted condition to use MAX function
+            ->get();
+
+
+        $expiredMembersIds = $expiredMembers->pluck('user_id')->toArray();
+
+        $expiringSoon = Fees::join('users', 'users.id', '=', 'fees.user_id')
+            ->whereNotIn('user_id', $expiredMembersIds)
+            ->whereYear('expiry', $currentYear)
+            ->select('users.name', 'users.email', 'users.phone', 'users.image')
+            ->selectRaw('MAX(expiry) as latest_expiration')
+            ->groupBy('users.id') // Group by users.id instead of user_id
+            ->havingRaw('DATEDIFF(MAX(expiry), NOW()) > 1')
+            ->havingRaw('DATEDIFF(MAX(expiry), NOW()) <= 8')
+            ->where('fees.club_id', Auth::user()->club_id)
+            ->get();
+
+        return view('reports.soon-to-expire-members', ['expiringSoon' => $expiringSoon]);
     }
     public function collectionHistory(Request $request)
     {
@@ -103,31 +105,67 @@ class ReportsController extends Controller
         ]);
     }
 
-    public function AttendanceHistory(){
+    public function AttendanceHistory()
+    {
         return view('reports.attendance-history');
     }
 
-    public function ExpensesReport(Request $request){
+    public function ExpensesReport(Request $request)
+    {
         $currentYear = Carbon::now()->year;
-        
-        $expenses = Expense::when($request->filterBy, function($query) use ($request) {
-                $filter = $request->filterBy;
-                if ($filter == 'weekly') {
-                    return $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                } elseif ($filter == 'monthly') {
-                    return $query->whereYear('date', Carbon::now()->year)->whereMonth('date', Carbon::now()->month);
-                } elseif ($filter == 'daily') {
-                    return $query->whereDate('date', Carbon::today());
-                } elseif ($filter == 'custom' && $request->startDate && $request->endDate) {
-                    return $query->whereBetween('date', [Carbon::parse($request->startDate), Carbon::parse($request->endDate)]);
-                } else {
-                    return $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-                }
-            })
+
+        $expenses = Expense::when($request->filterBy, function ($query) use ($request) {
+            $filter = $request->filterBy;
+            if ($filter == 'weekly') {
+                return $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+            } elseif ($filter == 'monthly') {
+                return $query->whereYear('date', Carbon::now()->year)->whereMonth('date', Carbon::now()->month);
+            } elseif ($filter == 'daily') {
+                return $query->whereDate('date', Carbon::today());
+            } elseif ($filter == 'custom' && $request->startDate && $request->endDate) {
+                return $query->whereBetween('date', [Carbon::parse($request->startDate), Carbon::parse($request->endDate)]);
+            } else {
+                return $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+            }
+        })
             ->whereYear('date', $currentYear)
             ->where('club_id', Auth::user()->club_id)
             ->get();
 
         return view('reports.expenses-report', ['expenses' => $expenses]);
+    }
+
+    public function ProfitandLoss(Request $request)
+    {
+        $filterBy = $request->input('filterBy');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+    
+        if ($filterBy === 'weekly') {
+            $startDate = Carbon::now()->startOfWeek();
+            $endDate = Carbon::now()->endOfWeek();
+        } elseif ($filterBy === 'monthly') {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+        } elseif ($filterBy === 'yearly') {
+            $startDate = Carbon::now()->startOfYear();
+            $endDate = Carbon::now()->endOfYear();
+        } elseif ($filterBy === 'custom' && $startDate && $endDate) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $request->input('startDate'));
+            $endDate = Carbon::createFromFormat('Y-m-d', $request->input('endDate'));
+        } else {
+            $startDate = Carbon::now()->format('Y-m-d');
+            $endDate = Carbon::now()->format('Y-m-d');
+        }
+        
+    
+        $fees = Fees::whereBetween('date',[$startDate, $endDate])->sum('amount');
+        $expenses = Expense::whereBetween('date', [$startDate, $endDate])->sum('amount');
+        $totalIncome = $fees;
+        $totalExpense = $expenses;
+    
+        $netProfitLoss = $totalIncome - $totalExpense;
+    
+        return view('reports.profit-and-loss', compact('totalIncome', 'totalExpense', 'netProfitLoss', 'filterBy'));
     }
 }

@@ -109,7 +109,8 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('collections-history', [ReportsController::class,'CollectionHistory'])->name('collections.history');
     Route::get('attendance-history', [ReportsController::class,'AttendanceHistory'])->name('attendance.history');
     Route::get('expenses-reports', [ReportsController::class,'ExpensesReport'])->name('expenses.reports');
-    // End Reports
+    Route::get('profit-loss', [ReportsController::class,'ProfitandLoss'])->name('profit_loss');
+   // End Reports
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
     Route::resource('staff', StaffController::class);
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');

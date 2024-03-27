@@ -14,7 +14,7 @@ class ExpensesTableSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $string = $faker->name . '-' . Carbon::now()->format('F-H:i');
             $invoice_url = strtoupper($string);
 
