@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Attendance;
 use App\Models\Fees;
 use App\Models\Department;
+use App\Models\Club;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
@@ -40,23 +41,26 @@ class MemberController extends AdminBaseController
     }
     public function store(Request $request)
     {
-        
+       
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'email' => 'required|email|unique:users,email'
         ]);
+
+        $setting = Club::first();
+        
+        if ($setting === null) {
+            return redirect()->back()->with('error', 'Failed to create club setting');
+        } 
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user->password = Hash::make('12345678');
         $user->phone = $request->phone;
-        $user->dob = $request->dob;
         $user->fees = $request->fees;
         $user->gender = $request->gender;
-        $user->club_id = Auth::user()->id;
+        $user->club_id = $setting->id;
         $user->created_by = Auth::user()->id;
 
         if ($request->hasFile('profile')) {
@@ -68,7 +72,7 @@ class MemberController extends AdminBaseController
 
         $user->save();
 
-        $user->assignRole($request->input('roles'));
+        $user->assignRole('Member');
         
         $fees = new Fees();
         $fees->user_id = $user->id;
@@ -110,17 +114,13 @@ class MemberController extends AdminBaseController
         ]);
     
         $input = $request->all();
-        if(!empty($input['password'])){ 
-            $input['password'] = Hash::make($input['password']);
-        }else{
-            $input = Arr::except($input,array('password'));    
-        }
+        $input['password'] = Hash::make('12345678');
+        
         $user = User::find($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
-        $user->assignRole($request->input('roles'));
-        return redirect()->route('member.index')
-                        ->with('success','User updated successfully');
+        $user->assignRole('Member');
+        return redirect()->route('member.index')->with('success','User updated successfully');
     }
     public function destroy($id)
     {

@@ -59,28 +59,7 @@
                             <input class="form-control" type="email" name="email" value="{{ $user->email }}" required> <!-- Populate existing email -->
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Password:</strong>
-                            <input class="form-control" type="password" name="password" placeholder="Enter new password"> <!-- Password field -->
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Confirm Password:</strong>
-                            <input class="form-control" type="password" name="confirm_password" placeholder="Confirm new password"> <!-- Confirm password field -->
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <strong>Role:</strong>
-                            <select name="role" class="form-control" required> <!-- Role field -->
-                              @foreach($roles as $role)
-                              <option value="{{ $role->name }}" @if($userRole == $role->name) selected @endif>{{ $role->name }}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
+                       
                         <div class="col-md-6">
                           <div class="form-group">
                             <strong>Phone:</strong>
