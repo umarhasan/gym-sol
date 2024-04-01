@@ -30,6 +30,7 @@ class MemberController extends AdminBaseController
                 $q->where('name', 'Member');
             })->where('created_by', Auth::id())->orderBy('id','DESC')->paginate(10);
         }
+        
         return view('member.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }

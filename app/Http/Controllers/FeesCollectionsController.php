@@ -18,6 +18,7 @@ class FeesCollectionsController extends AdminBaseController
             }])
             ->select('users.id', 'users.name', 'users.phone')
             ->addSelect(DB::raw('(SELECT MAX(f.expiry) FROM fees f WHERE f.user_id = users.id) AS latest_expiry'))
+            ->addSelect(DB::raw('(SELECT f.amount FROM fees f WHERE f.user_id = users.id ORDER BY f.created_at DESC LIMIT 1) AS latest_amount'))
             ->paginate(10);
 
         return view('fees.fees-collections', compact('collections'));

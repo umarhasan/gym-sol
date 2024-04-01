@@ -11,6 +11,13 @@
             list-style: none;
             border-radius: 0.25rem;
         }
+
+        .whatsapp-icon {
+            margin-left: 5px;
+            /* Adjust margin as needed */
+            color: green;
+            /* WhatsApp icon color */
+        }
     </style>
     <div class="main-panel">
         <div class="content-wrapper">
@@ -97,11 +104,22 @@
                                                                     @if (isset($memberSubscription->latest_expiration))
                                                                         @if ($expired)
                                                                             <span
-                                                                                style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center"
-                                                                                class="badge light badge-danger">
-                                                                                <i
-                                                                                    class="fa-duotone fa-clock mr-1 text-danger"></i>
-                                                                                &nbsp; Subscription has expired.
+                                                                                style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; justify-content: center;"
+                                                                                class="badge light badge-danger"
+                                                                                data-toggle="tooltip" data-placement="top"
+                                                                                title="Subscription has expired - {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days">
+                                                                                <i class="fa fa-clock mr-1 text-white"
+                                                                                    style="align-self: center;"></i>
+                                                                                <span style="flex: 1;">&nbsp; Subscription
+                                                                                    has expired
+                                                                                    -{{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }}
+                                                                                    days.</span>
+                                                                                <a href="https://api.whatsapp.com/send?phone={{ $user->phone }}&text=My subscription has expired {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($user->latest_expiry)) }} days ago. Please help me."
+                                                                                    target="_blank"
+                                                                                    style="align-self: center;">
+                                                                                    <i class="fab fa-whatsapp fa-2x mr-2 text-green"
+                                                                                        style="color: #8bf100;"></i>
+                                                                                </a>
                                                                             </span>
                                                                         @else
                                                                             @if (Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) <= 8)
@@ -109,7 +127,7 @@
                                                                                     style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center"
                                                                                     class="badge light badge-warning">
                                                                                     <i
-                                                                                        class="fa-duotone fa-clock mr-1 text-warning"></i>
+                                                                                        class="fa fa-clock mr-1 text-white"></i>
                                                                                     &nbsp; Subscription will expire in
                                                                                     {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }}
                                                                                     days
@@ -119,7 +137,7 @@
                                                                                     style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center"
                                                                                     class="badge light badge-primary">
                                                                                     <i
-                                                                                        class="fa-duotone fa-clock mr-1 text-primary"></i>
+                                                                                        class="fa fa-clock mr-1 text-white"></i>
                                                                                     &nbsp;
                                                                                     Subscription will expire in
                                                                                     {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }}
@@ -130,7 +148,7 @@
                                                                                     style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center"
                                                                                     class="badge light badge-light">
                                                                                     <i
-                                                                                        class="fa-duotone fa-clock mr-1 text-light"></i>
+                                                                                        class="fa fa-clock mr-1 text-light"></i>
                                                                                     &nbsp; Not Paid Yet!
                                                                                 </span>
                                                                             @endif
@@ -139,8 +157,7 @@
                                                                         <span
                                                                             style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center"
                                                                             class="badge light badge-light">
-                                                                            <i
-                                                                                class="fa-duotone fa-clock mr-1 text-light"></i>
+                                                                            <i class="fa fa-clock mr-1 text-white"></i>
                                                                             &nbsp; Not Paid Yet!
                                                                         </span>
                                                                     @endif
