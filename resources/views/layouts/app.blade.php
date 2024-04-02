@@ -304,13 +304,13 @@
                     @can('collections-history')
                       <li class="nav-item"> <a class="nav-link" href="{{route('collections.history')}}"> Collection History </a></li>
                     @endcan
+                    <li class="nav-item"> <a class="nav-link" href="{{route('expenses.reports')}}"> Expenses Hisotry</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('profit_loss')}}"> Profit and Loss </a></li>
-                    
                   </ul>
                 </div>
               </li>
             <li class="nav-item">
-            <a href="{{url('/logout')}}" class="nav-link">
+              <a href="{{url('/logout')}}" class="nav-link">
                   <i class="fa fa-users menu-icon"></i>
                   <span class="menu-title">Logout</span>
                 </a>  

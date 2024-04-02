@@ -108,18 +108,21 @@
                                                                                 class="badge light badge-danger"
                                                                                 data-toggle="tooltip" data-placement="top"
                                                                                 title="Subscription has expired - {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days">
-                                                                                <i class="fa fa-clock mr-1 text-white"
-                                                                                    style="align-self: center;"></i>
-                                                                                <span style="flex: 1;">&nbsp; Subscription
-                                                                                    has expired
-                                                                                    -{{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }}
-                                                                                    days.</span>
-                                                                                <a href="https://api.whatsapp.com/send?phone={{ $user->phone }}&text=My subscription has expired {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($user->latest_expiry)) }} days ago. Please help me."
-                                                                                    target="_blank"
-                                                                                    style="align-self: center;">
-                                                                                    <i class="fab fa-whatsapp fa-2x mr-2 text-green"
-                                                                                        style="color: #8bf100;"></i>
-                                                                                </a>
+                                                                                <div
+                                                                                    style="display: flex; align-items: center;">
+                                                                                    <i
+                                                                                        class="fa fa-clock mr-1 text-white"></i>
+                                                                                    <span>&nbsp; Subscription has expired
+                                                                                        -{{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }}
+                                                                                        days.</span>
+                                                                                </div>
+                                                                                <div class="d-inline-block" style="vertical-align: middle;">
+                                                                                    <a href="https://api.whatsapp.com/send?phone={{ $user->phone }}&text=My subscription has expired {{ Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($user->latest_expiry)) }} days ago. Please help me."
+                                                                                        target="_blank">
+                                                                                        <i class="fab fa-whatsapp fa-2x mr-2 text-green"
+                                                                                            style="color: #8bf100;"></i>
+                                                                                    </a>
+                                                                                </div>
                                                                             </span>
                                                                         @else
                                                                             @if (Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) <= 8)

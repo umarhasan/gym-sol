@@ -129,4 +129,12 @@ class ExpensesController extends AdminBaseController
 
         return redirect()->route('expenses.index');
     }
+
+    public function ExpensesInvoice($id){
+
+        $expense = Expense::findOrFail($id); // or use your preferred method to retrieve the expense
+        $setting = DB::table('clubs')->where('id', $expense->club_id)->first();
+       
+        return view('expenses.expenses-invoice',['clubSetting' => $setting, 'data' => $expense]);
+    }
 }

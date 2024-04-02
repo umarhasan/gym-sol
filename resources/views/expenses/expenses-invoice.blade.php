@@ -1,135 +1,161 @@
 @extends('layouts.app')
 
-
 @section('content')
-<div class="main-panel">
-  <div class="content-wrapper">
-    <div class="row">
-      <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-          <div class="container-fluid">
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <h1>Member Management</h1>
-              </div>
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active">Member Management</li>
-                </ol>
-              </div>
-            </div>
-          </div><!-- /.container-fluid -->
-        </section>
-        <section class="content">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Member List</h3>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <div class="pull-right">
-                      @can('member-create')
-                        <a class="btn btn-primary" style="margin-bottom:5px" href="{{ route('member.create') }}"> + Add Member</a>
-                      @endcan
-                    </div>
-                    <!-- <table id="example1" class="table table-bordered table-striped"> -->
-                    <table id="order-listing" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
-                      <thead>
-                        <tr>
-                          <th>S.No</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Phone</th>
-                          <th>Fees</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @if($data)
-                        @php
-                        $id =1;
-                        @endphp
-                        @foreach($data as $key => $user)
-                        <tr>
-                          <td>{{$id++}}</td>
-                          <td>{{ $user->name }}</td>
-                          <td>{{ $user->email }}</td>
-                          <td>{{ $user->phone }}</td>
-                          <td>{{ $user->fees }}</td>
-                          <td>
-                          @php 
-                                $currentYear = date('Y');
-                                $memberSubscription = DB::table('fees')
-                                ->whereYear('expiry', $currentYear)
-                                ->where('user_id',$user->id)
-                                ->select(DB::raw('MAX(expiry) as latest_expiration'))
-                                ->first();
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <style>
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
 
-                                if(isset($memberSubscription)) {
-                                    $expired = Carbon\Carbon::now()->gte(Carbon\Carbon::parse($memberSubscription->latest_expiration));
-                                }    
-                            @endphp
-                            @if(isset($memberSubscription->latest_expiration))
-                            @if ($expired)
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-danger">
-                                <i class="fa-duotone fa-clock mr-1 text-danger"></i> &nbsp; Subscription has expired.
-                              </span>
-                            @else
-                            @if(Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration))<=8)
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-warning">
-                              <i class="fa-duotone fa-clock mr-1 text-warning"></i> &nbsp; Subscription will expire in {{  Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days
-                              </span>
-                            @elseif(Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration))>8)
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-primary">
-                                  <i class="fa-duotone fa-clock mr-1 text-primary"></i> &nbsp; 
-                                  Subscription will expire in {{  Carbon\Carbon::now()->diffInDays(Carbon\Carbon::parse($memberSubscription->latest_expiration)) }} days.
-                              </span>   
-                              @else
-                                  <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-light">
-                                      <i class="fa-duotone fa-clock mr-1 text-light"></i> &nbsp; Not Paid Yet!
-                              </span>
-                              @endif
-                            @endif
-                          @else
-                              <span style="width: 100% white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display:flex; justify-content:center" class="badge light badge-light">
-                                  <i class="fa-duotone fa-clock mr-1 text-light"></i> &nbsp; Not Paid Yet!
-                            </span>
-                          @endif 
-                          </td>
-                          <td>
-                            <div class="btn-group">
-                            <a class="btn btn-warning btn-a" href="{{ route('member.profile',$user->id) }}"><i class="fa fa-eye"></i></a> &nbsp;   
-                            
-                              @can('member-edit')
-                                <a class="btn btn-primary btn-a" href="{{ route('member.edit',$user->id) }}">Edit</a> &nbsp;   
-                              @endcan
-                              @can('member-delete')
-                                <form method="post" action="{{route('member.destroy',$user->id)}}">
-                                  @csrf
-                                  @method('delete')
-                                    <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
-                                </form>
-                              @endcan
+                    .main-panel,
+                    .main-panel * {
+                        visibility: visible;
+                    }
+
+                    .main-panel {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                    }
+
+                    #print-button {
+                        display: none;
+                    }
+                }
+            </style>
+
+            <div class="row">
+                <div class="content-wrapper">
+                    @php
+                        $actual_link =
+                            (empty($_SERVER['HTTPS']) ? 'http' : 'https') .
+                            "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                    @endphp
+                    <div class="row" style="display: flex; justify-content: center; align-items: center">
+                        <div class="col-md-8 col-sm-12 card mt-5" style="border-radius: 0px;">
+                            <a href="{{ route('member.index') }}" id="back-button"
+                                style="border-radius: 0px; width: 120px; margin-left: -2%; border-radius: 0px 0px 40px 0px"
+                                class="btn btn-sm btn-primary"> <i class="fa-regular fa-chevrons-left"></i> Back </a>
+                            <div class="card-header" style="padding: 0px;">
+                                <div class="logo"
+                                    style="width: 20%; display: flex; justify-content: space-around; align-items: flex-end">
+                                    <img style="width: 100%; height: auto"
+                                        src="{{ $clubSetting->logo ?? asset('assets/gymsol-logo-mini.png') }}"
+                                        alt="">
+                                </div>
+                                <h4 class="text text-black-50 text-bold"
+                                    style="display: flex; justify-content: flex-end; align-items: flex-start; flex-direction: column; font-weight: bold;">
+                                    <div class="GYM"> <span class="text text-info">{{ $clubSetting->gym_name }}</span>
+                                    </div>
+                                    <div class="invoice text-info"> Invoice <span class="text text-capitalize text-black"
+                                            style="font-weight: 200; font-size: 16px; margin-top:5px;">#{{ $data->invoice_url }}</span>
+                                    </div>
+                                </h4>
                             </div>
-                          </td>
-                        </tr>
-                        @endforeach
-                        @endif
-                      </tbody>
-                    </table>
-                  </div>
+                            <div class="card-body" style="padding: 0px">
+                                <div class="row">
+                                    <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <div class="card" style="box-shadow: none; ">
+                                            <div class="card-body pb-0"
+                                                style="box-shadow: none; border: 0.5px solid rgba(0,0,0,0.1); border-right: none;">
+                                                <h4 class="fw-bolder">From</h4>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>GYM</strong>
+                                                        <span class="mb-0">{{ $clubSetting->gym_name }}</span>
+                                                    </li>
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>Owner</strong>
+                                                        <span class="mb-0"> {{ $clubSetting->owner_name }}</span>
+                                                    </li>
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>Contact No </strong>
+                                                        <span class="mb-0">{{ $clubSetting->owner_phone }}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+
+                                        <div class="card" style="box-shadow: none;">
+                                            <div class="card-body pb-0"
+                                                style="box-shadow: none; border: 0.5px solid rgba(0,0,0,0.1)">
+                                                <h4 class="fw-bolder">To</h4>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>Expense By</strong>
+                                                        <span class="mb-0">{{ $data->expense_by }}</span>
+                                                    </li>
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>Paid To</strong>
+                                                        <span class="mb-0">{{ $data->paid_to }}</span>
+                                                    </li>
+
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>Amount</strong>
+                                                        <span class="mb-0">{{ $data->amount }}</span>
+                                                    </li>
+
+                                                    <li class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong>Date</strong>
+                                                        <span class="mb-0">{{ $data->date }}</span>
+                                                    </li>
+
+                                                    <li id="print-button"
+                                                        class="list-group-item d-flex px-0 justify-content-between">
+                                                        <strong></strong>
+                                                        <div class="col-4 pt-3 pb-3 border-right">
+                                                            <a target="_blank"
+                                                                href="https://wa.me/send?phone={{ $clubSetting->active_whatsapp_no }}&amp;text=Thank you for making payment in {{ $clubSetting->gym_title }}, Here is your invoice Link  :  "
+                                                                class="btn btn-xs btn-link" style="border-radius: 0px">
+                                                                <h3 class="mb-1 text-primary"><i
+                                                                        class="fa-brands fa-whatsapp"></i></h3>
+                                                                <span> Send </span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-4 pt-3 pb-3 border-right">
+                                                            <a href="mailto:" class="btn btn-xs btn-link"
+                                                                style="border-radius: 0px">
+                                                                <h3 class="mb-1 text-primary"><i
+                                                                        class="fa-duotone fa-inboxes"></i></h3>
+                                                                <span>
+                                                                    Mail
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-4 pt-3 pb-3">
+                                                            <button onclick="printInvoice()" class="btn btn-xs btn-link"
+                                                                style="border-radius: 0px">
+                                                                <h3 class="mb-1 text-primary"><i
+                                                                        class="fa-duotone fa-print"></i></h3>
+                                                                <span>
+                                                                    Print
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </section>
-    </div>
-  </div>
-</div>
-@endsection
+
+        </div>
+
+
+        <script>
+            function printInvoice() {
+                window.print();
+                return false; // prevent the default behavior of the button
+            }
+        </script>
+    @endsection

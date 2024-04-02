@@ -92,10 +92,9 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('member', MemberController::class);
     Route::resource('fees', FeesController::class);
 
-
     Route::get('invoice/{invoice_url}', [InvoiceController::class,'show'])->name('member.invoice');
-   
     Route::resource('expenses', ExpensesController::class);
+    Route::get('expenses-invoice/{id}', [ExpensesController::class,'ExpensesInvoice'])->name('expenses-invoice');
     Route::get('club/create', [SettingController::class,'create'])->name('club.create');
     Route::get('/club/settings', [SettingController::class, 'createOrUpdate'])->name('club.settings.createOrUpdate');
     Route::post('/club/settings', [SettingController::class, 'createOrUpdate']);
@@ -110,7 +109,7 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('attendance-history', [ReportsController::class,'AttendanceHistory'])->name('attendance.history');
     Route::get('expenses-reports', [ReportsController::class,'ExpensesReport'])->name('expenses.reports');
     Route::get('profit-loss', [ReportsController::class,'ProfitandLoss'])->name('profit_loss');
-   // End Reports
+    // End Reports
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
     Route::resource('staff', StaffController::class);
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');
