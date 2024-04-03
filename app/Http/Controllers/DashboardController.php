@@ -42,8 +42,8 @@ class DashboardController extends Controller
             $endDate = Carbon::create($currentYear, $month, 1)->endOfMonth();
 
             // Calculate profit and loss for the month
-            $fees = $isAdmin ? Fees::whereBetween('created_at', [$startDate, $endDate])->sum('amount') : Fees::where('user_id', $userId)->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
-            $expenses = $isAdmin ? Expense::whereBetween('created_at', [$startDate, $endDate])->sum('amount') : Expense::where('user_id', $userId)->whereBetween('created_at', [$startDate, $endDate])->sum('amount');
+            $fees = $isAdmin ? Fees::sum('amount') : Fees::where('user_id', $userId)->sum('amount');
+            $expenses = $isAdmin ? Expense::sum('amount') : Expense::where('user_id', $userId)->sum('amount');
             $profitAndLoss = $fees - $expenses;
 
             // Store profit and loss for the month
