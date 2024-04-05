@@ -49,8 +49,8 @@
                                         <!-- /.card-header -->
                                         <div class="card-body">
 
-                                            <!-- <table id="example1" class="table table-bordered table-striped"> -->
-                                            <table id="example" class="table dataTable no-footer" role="grid"
+                                            <div style="max-height: 50; overflow-y: auto;">
+                                                <table id="example" class="table dataTable no-footer" role="grid"
                                                 aria-describedby="order-listing_info">
                                                 <thead>
                                                     <tr>
@@ -139,8 +139,9 @@
                                                         @endforeach
                                                     @endif
                                                 </tbody>
-                                            </table>
-                                            {{ $collections->links('pagination::bootstrap-4') }}
+                                                </table>
+                                                {{ $collections->links('pagination::bootstrap-4') }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
