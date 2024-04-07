@@ -110,30 +110,36 @@ class ReportsController extends Controller
         return view('reports.attendance-history');
     }
 
+
     public function ExpensesReport(Request $request)
     {
-        $currentYear = Carbon::now()->year;
+        $filterBy = $request->input('filterBy');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
 
-        $expenses = Expense::when($request->filterBy, function ($query) use ($request) {
-            $filter = $request->filterBy;
-            if ($filter == 'weekly') {
+        $expenses = Expense::when($request->filterBy, function ($query) use ($filterBy, $startDate, $endDate) {
+            if ($filterBy == 'weekly') {
                 return $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-            } elseif ($filter == 'monthly') {
+            } elseif ($filterBy == 'monthly') {
                 return $query->whereYear('date', Carbon::now()->year)->whereMonth('date', Carbon::now()->month);
-            } elseif ($filter == 'daily') {
+            } elseif ($filterBy == 'daily') {
                 return $query->whereDate('date', Carbon::today());
-            } elseif ($filter == 'custom' && $request->startDate && $request->endDate) {
-                return $query->whereBetween('date', [Carbon::parse($request->startDate), Carbon::parse($request->endDate)]);
+            } elseif ($filterBy == 'custom' && $startDate && $endDate) {
+                return $query->whereBetween('date', [Carbon::parse($startDate), Carbon::parse($endDate)]);
             } else {
                 return $query->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
             }
-        })
-            ->whereYear('date', $currentYear)
-            ->where('club_id', Auth::user()->club_id)
-            ->get();
+        })->whereYear('date', Carbon::now()->year)
+        ->where('club_id', Auth::user()->club_id)->get();
 
-        return view('reports.expenses-report', ['expenses' => $expenses]);
+        return view('reports.expenses-report', [
+            'expenses' => $expenses,
+            'filterBy' => $filterBy,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
     }
+
 
     public function ProfitandLoss(Request $request)
     {

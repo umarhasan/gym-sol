@@ -9,13 +9,18 @@ use App\Models\Attendance;
 use App\Models\Fees;
 use App\Models\Department;
 use App\Models\Club;
+use App\Models\ImportHistory;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use DB;
-use Hash;
-use Auth;
 use Illuminate\Support\Arr;
+
+
+
 
 class MemberController extends AdminBaseController
 {
@@ -149,6 +154,90 @@ class MemberController extends AdminBaseController
             'member' => $member,
             'timeLeft' => $timeLeft, // Include the timeLeft variable in the view
         ]);
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            // Validate the uploaded file
+            $request->validate([
+                'file' => 'required|file|mimes:csv,txt'
+            ]);
+
+            // Retrieve the uploaded file
+            $file = $request->file('file');
+
+            // Read the contents of the file
+            $data = array_map('str_getcsv', file($file));
+
+            // Remove the header row if present
+            if (count($data) > 0 && isset($data[0])) {
+                unset($data[0]);
+            }
+
+            // Counter for records imported
+            $recordsImported = 0;
+
+            // Iterate over each row and create members
+            foreach ($data as $row) {
+                // Assuming CSV format: name,email,phone,fees,gender,expiry
+                $user = new User();
+                $user->name = $row[0];
+                $user->email = $row[1];
+                $user->password = Hash::make('12345678');
+                $user->phone = $row[2];
+                $user->fees = $row[3];
+                $user->gender = $row[4];
+                $user->club_id = Auth::user()->club_id;
+                $user->created_by = Auth::user()->id;
+
+                // Save the user
+                $user->save();
+
+                // Assign 'Member' role to the user
+                $user->assignRole('Member');
+
+                // Create fees record for the user
+                $fees = new Fees();
+                $fees->user_id = $user->id;
+                $fees->amount = $row[3];
+                $fees->date = now();
+                $fees->expiry = Carbon::parse($row[5]);
+                $fees->club_id = Auth::user()->club_id;
+                $fees->invoice_url = strtoupper(str_replace(' ', '_', $row[0]) . '_' . Carbon::now()->format('F-H:i'));
+                $fees->save();
+
+                // Increment the counter
+                $recordsImported++;
+            }
+
+            // Log success message
+            Log::info('Data imported successfully');
+
+            // Log import history
+            $this->logImportHistory(Auth::user()->id, $recordsImported, null);
+
+            // Redirect with success message
+            return redirect()->route('member.index')->with('success', 'Data imported successfully');
+        } catch (\Exception $e) {
+            // Log the exception
+            Log::error('Import failed: ' . $e->getMessage());
+
+            // Log import history with error message
+            $this->logImportHistory(Auth::user()->id, null, $e->getMessage());
+
+            // Redirect back with error message
+            return redirect()->back()->with('error', 'Data import failed. Please check the log for details.');
+        }
+    }
+
+    private function logImportHistory($userId, $recordsImported, $errorMessage)
+    {
+        $importHistory = new ImportHistory();
+        $importHistory->user_id = $userId;
+        $importHistory->records_imported = $recordsImported;
+        $importHistory->error_message = $errorMessage;
+        $importHistory->save();
     }
 
 }

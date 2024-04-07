@@ -115,11 +115,12 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Total Income</td>
+                                            
+                                            <td><a href="{{ route('collections.history') }}">Total Income</a></td>
                                             <td>${{ $totalIncome }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Expenses</td>
+                                            <td><a href="{{ route('expenses.reports') }}">Total Expenses</a></td>
                                             <td>${{ $totalExpense }}</td>
                                         </tr>
                                         <tr>

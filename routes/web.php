@@ -139,6 +139,9 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::resource('sections',SectionController::class);
     Route::resource('general_setting',GeneralSettingController::class);
     Route::resource('orders',OrderController::class);
+    // Import
+    Route::post('/members/import', [MemberController::class, 'import'])->name('members.import');
+  
 });
   
   
