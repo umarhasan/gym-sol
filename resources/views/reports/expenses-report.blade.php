@@ -41,50 +41,31 @@
                     <table id="order-listing" class="table dataTable no-footer" role="grid" aria-describedby="order-listing_info">
                       <thead>
                         <tr>
-                          <th>S.No</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Roles</th>
-                          <th>Action</th>
+                         <th>Expense by</th>
+                          <th>Paid To</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <th>Invoice</th>
                         </tr>
                       </thead>
                       <tbody>
-                        @if($data)
-                        @php
-                        $id =1;
-                        @endphp
-                        @foreach($data as $key => $user)
-                        <tr>
-                          <td>{{$id++}}</td>
-                          <td>{{ $user->name }}</td>
-                          <td>{{ $user->email }}</td>
-                          <td>
-                            @if(!empty($user->getRoleNames()))
-                            @foreach($user->getRoleNames() as $v)
-                            <label class="badge badge-success">{{ $v }}</label>
-                            @endforeach
-                            @endif
-                          </td>
-                          <td>
-                            <div class="btn-group">
-                           
-                              @can('user-edit')
-                                <a class="btn btn-primary btn-a" href="{{ route('users.edit',$user->id) }}">Edit</a> &nbsp;   
-                              @endcan
-                              @can('user-permission')
-                                <a class="btn btn-primary btn-a" href="{{ route('users.permission',$user->id) }}">User Permission</a>    
-                              @endcan
-                              @can('user-delete')
-                              <form method="post" action="{{route('users.destroy',$user->id)}}">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" onclick="return confirm('Are You Sure Want To Delete This.??')" type="button" class="btn btn-danger btn-b"><i class="fa fa-trash"></i></button>
-                              </form>
-                              @endcan
-                            </div>
-                          </td>
-                        </tr>
-                        @endforeach
+                        @if($expenses)
+                       
+                        @foreach($expenses as $data)
+                            <tr>
+                                <td>
+                                    {{$data->expense_by}}
+                                </td>
+                                <td>
+                                    {{$data->paid_to}}
+                                </td>
+                                <td>{{$data->amount}}</td>
+                                <td>{{$data->date}}</td>
+                                <td>
+                                    <a href="{{route('expenses-invoice',['id' => $data->id])}}" class="btn btn-xs btn-link"> {{$data->invoice_url}} </a>
+                                </td>
+                            </tr>
+                          @endforeach
                         @endif
                       </tbody>
                     </table>
