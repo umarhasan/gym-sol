@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Department;
+use App\Models\Club;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
 use Hash;
 use Auth;
 use Illuminate\Support\Arr;
+use Carbon\Carbon;
 
 class UserController extends AdminBaseController
 {
     public function index(Request $request)
     {
+        
         if (Auth::user()->is_admin) {
             // If admin, get all users
             $data = User::orderBy('id', 'DESC')->orderBy('id','DESC')->paginate(10);
@@ -30,8 +32,7 @@ class UserController extends AdminBaseController
     public function create()
     {
          $roles = Role::select(['id','name'])->get();
-         $departments = Department::get();
-        return view('users.create',compact('roles','departments'));
+        return view('users.create',compact('roles'));
     }
     public function store(Request $request)
     {
@@ -42,10 +43,16 @@ class UserController extends AdminBaseController
             'roles' => 'required'
         ]);
 
+        $setting = Club::where('user_id',Auth::user()->id)->first();
+
+        if ($setting === null) {
+            return redirect()->back()->with('error', 'Failed to create club setting');
+        }
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['created_by'] = Auth::user()->id;
-
+        $input['email_verified_at'] = Carbon::now()->format('Y-m-d H:i:s');
+        $input['club_id'] = $setting->user_id;
         // Create the user
         $user = User::create($input);
         // // Get the selected role

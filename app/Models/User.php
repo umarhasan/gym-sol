@@ -31,11 +31,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'dob',
         'fees',
         'image',
-       'profile',
+        'profile',
         'is_active',
         'club_id',
         'is_welcome_msg_sent',
         'password',
+        'email_verified_at',
         'is_email_verified',
         'created_by',
         'is_admin',
@@ -56,13 +57,13 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    // ];
 
     public function Fees()
     {
-        return $this->hasOne(\App\Models\Fees::class,'user_id');
+        return $this->hasOne(\App\Models\Fees::class,'user_id')->whereNull('deleted_at');
     }
 
     public function department()
@@ -91,4 +92,6 @@ class User extends Authenticatable implements MustVerifyEmail
             $query->where('name', $roleName);
         });
     }
+    
+
 }

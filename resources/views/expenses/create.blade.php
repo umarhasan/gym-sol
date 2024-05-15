@@ -31,19 +31,20 @@
                                                 @csrf
 
                                                 <div class="form-row">
-
+                                                    <!-- Date Field -->
                                                     <div class="form-group col-md-6">
-                                                        <label for="expense_by">Date</label>
-                                                        <input type="date" name="current_date" class="form-control" id="current_date"
+                                                        <h5>Date: {{ \Carbon\Carbon::now()->toDateString() }}</h5>
+                                                        <input type="hidden" name="current_date" class="form-control" id="current_date"
                                                             name="current_date" disabled>
                                                     </div>
+                                                    <!-- Current User Field -->
                                                     <div class="form-group col-md-6">
-                                                        <label for="amount">Current User</label>
-                                                        <input type="name" class="form-control" id="amount"
+                                                        <h5>Name: {{ auth()->user()->name }}</h5>
+                                                        <input type="hidden" class="form-control" id="amount"
                                                             name="user_name" value="{{ auth()->user()->name }}" disabled>
+                                                    
                                                     </div>
                                                 </div>
-
 
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
@@ -62,27 +63,14 @@
                                                     <textarea class="form-control" id="details" name="details" placeholder="Enter details" rows="3" required></textarea>
                                                 </div>
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-6">
+                                                     <div class="form-group col-md-6">
                                                         <label for="date">Date</label>
-                                                        <input type="date" class="form-control" id="date"
-                                                            name="date" required>
+                                                        <input type="date" class="form-control" id="date" name="date" value="{{ \Carbon\Carbon::now()->toDateString() }}" required>
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="paid_to">Paid To</label>
                                                         <input type="text" class="form-control" id="paid_to"
                                                             name="paid_to" placeholder="Enter recipient" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-6">
-                                                        <label for="club_id">Club ID</label>
-                                                        <input type="text" class="form-control" id="club_id"
-                                                            name="club_id" placeholder="Enter club ID">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label for="invoice_url">Invoice URL</label>
-                                                        <input type="text" class="form-control" id="invoice_url"
-                                                            name="invoice_url" placeholder="Enter invoice URL">
                                                     </div>
                                                 </div>
 
@@ -97,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <script>
+                <script>
             // Get the current date
             var currentDate = new Date();
 

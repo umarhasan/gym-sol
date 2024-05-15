@@ -62,13 +62,15 @@ Route::get('account/verify/{token}', [LoginController::class, 'verifyAccount'])-
 Route::get('/detail/{id}', [HomeController::class,'product_detail'])->name('product.detail');
 
 Auth::routes(['verify' => true]);
-
+// Auth::routes();
 
 Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('/change_password', [DashboardController::class, 'change_password'])->name('change_password');
     Route::post('/store_change_password', [DashboardController::class, 'store_change_password'])->name('store_change_password');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::resource('roles', RoleController::class);
+    Route::get('roles-fetch', [RoleController::class, 'index'])->name('roles.index');
+    
     Route::resource('shift', ShiftController::class);
     Route::resource('attendance', AttendanceController::class);
     // Satrt Leads
@@ -79,21 +81,34 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('pick', [LeadsController::class, 'LeadsPick'])->name('leads.pick');
     Route::get('leads/invoice/view/{id}', [LeadsController::class, 'LeadsInvoiceShow'])->name('leads.invoice.show');
     
-    // End Leads
-    Route::resource('leaves', LeavesController::class);
+    // End Depa
     Route::resource('department', DepartmentController::class);
+    Route::get('department-fetch', [DepartmentController::class, 'index'])->name('department.index');
+    
+    
     Route::resource('permission', PermissionController::class);
+    Route::get('permission-fetch', [PermissionController::class, 'index'])->name('permission.index');
+    
     Route::resource('task', TaskController::class);
+    
     Route::resource('client', ClientController::class);
+    Route::get('client-fetch', [ClientController::class, 'index'])->name('client.index');
+    
+    
     Route::resource('project', ProjectController::class);
     Route::resource('mail', MailController::class);
     Route::resource('leadStatus', LeadStatusController::class);
     Route::resource('leadSources', LeadSourcesController::class);
     Route::resource('member', MemberController::class);
+    Route::get('member-fetch', [MemberController::class, 'index'])->name('member.index');
+    Route::get('/members/download-sample', [MemberController::class,'downloadSample'])->name('members.download');
     Route::resource('fees', FeesController::class);
-
+    Route::get('fees-fetch', [FeesController::class, 'index'])->name('fees.index');
+    
     Route::get('invoice/{invoice_url}', [InvoiceController::class,'show'])->name('member.invoice');
     Route::resource('expenses', ExpensesController::class);
+    Route::get('expenses-fetch', [ExpensesController::class, 'index'])->name('expenses.index');
+    
     Route::get('expenses-invoice/{id}', [ExpensesController::class,'ExpensesInvoice'])->name('expenses-invoice');
     Route::get('club/create', [SettingController::class,'create'])->name('club.create');
     Route::get('/club/settings', [SettingController::class, 'createOrUpdate'])->name('club.settings.createOrUpdate');
@@ -111,11 +126,22 @@ Route::group(['middleware' => ['auth','verified']], function(){
     Route::get('profit-loss', [ReportsController::class,'ProfitandLoss'])->name('profit_loss');
     // End Reports
     Route::get('member-profile/{id}', [MemberController::class,'MemberProfile'])->name('member.profile');   
+    //Update and Delete
+    Route::put('subscriptions-update/{id}', [MemberController::class,'subscriptionsUpdate'])->name('subscriptions.update');
+    Route::delete('subscriptions-delete/{id}', [MemberController::class,'subscriptionsDelete'])->name('subscriptions.delete');
+    
+    
     Route::resource('staff', StaffController::class);
+   Route::get('staff-fetch', [StaffController::class, 'index'])->name('staff.index');
+   
+  
   	Route::get('clients/fetch', [ClientController::class, 'assign_client'])->name('clients.fetch');
   	Route::get('projects/fetch', [ProjectController::class, 'assign_project'])->name('projects.fetch');
     
     Route::resource('users', UserController::class);
+   Route::get('users-fetch', [UserController::class, 'index'])->name('users.index');
+   
+  
   	Route::get('user/fetch', [UserController::class, 'assign_user'])->name('user.fetch');
   	Route::get('user/permission/{id}', [UserController::class, 'user_permission'])->name('users.permission');
     Route::post('user/permission/update/{id}', [UserController::class, 'user_permission_update'])->name('user.permission.update');

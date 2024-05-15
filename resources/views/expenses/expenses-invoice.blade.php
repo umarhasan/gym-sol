@@ -113,7 +113,7 @@
                                                                 href="https://wa.me/send?phone={{ $clubSetting->active_whatsapp_no }}&amp;text=Thank you for making payment in {{ $clubSetting->gym_title }}, Here is your invoice Link  :  "
                                                                 class="btn btn-xs btn-link" style="border-radius: 0px">
                                                                 <h3 class="mb-1 text-primary"><i
-                                                                        class="fa-brands fa-whatsapp"></i></h3>
+                                                                        class="fab fa-whatsapp"></i></h3>
                                                                 <span> Send </span>
                                                             </a>
                                                         </div>
@@ -121,7 +121,7 @@
                                                             <a href="mailto:" class="btn btn-xs btn-link"
                                                                 style="border-radius: 0px">
                                                                 <h3 class="mb-1 text-primary"><i
-                                                                        class="fa-duotone fa-inboxes"></i></h3>
+                                                                        class="fas fa-envelope"></i></h3>
                                                                 <span>
                                                                     Mail
                                                                 </span>
@@ -131,7 +131,7 @@
                                                             <button onclick="printInvoice()" class="btn btn-xs btn-link"
                                                                 style="border-radius: 0px">
                                                                 <h3 class="mb-1 text-primary"><i
-                                                                        class="fa-duotone fa-print"></i></h3>
+                                                                        class="fas fa-print"></i></h3>
                                                                 <span>
                                                                     Print
                                                                 </span>

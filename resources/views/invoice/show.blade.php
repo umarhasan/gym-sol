@@ -116,7 +116,7 @@
                                         <div class="col-4 pt-3 pb-3 border-right">
                                             <!-- WhatsApp icon and action -->
                                             <a target="_blank"
-                                                href="https://wa.me/send?phone={{ $data->phone }}&amp;text=Thank you for making payment in {{ $clubSetting->gym_title }}, Here is your invoice Link :  {{ $actual_link }}"
+                                                href="https://wa.me/send?phone={{ $data->phone }}&amp;text=Hello {{ $data->name }} Thank you for paying the fees of the amount Rs. {{ $data->amount }}. Your Membership has been extended. The new Expiry date of your Membership is {{ $data->expiry }}."
                                                 class="btn btn-xs btn-link" style="border-radius: 0px">
                                                 <i class="fab fa-whatsapp"></i>
                                                 <span> WhatsApp </span>

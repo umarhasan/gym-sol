@@ -85,9 +85,13 @@
                                                                     <td>{{ $expense->invoice_url }}</td>
                                                                     <td>
                                                                         <div class="btn-group">
+                                                                            @can('expenses-update')
                                                                             <a class="btn btn-primary btn-a"
                                                                                 href="{{ route('expenses.create', $expense->id) }}"><i
-                                                                                    class="fa fa-edit"></i></a> &nbsp;
+                                                                                    class="fa fa-edit"></i></a>
+                                                                            @endcan        
+                                                                                    &nbsp;
+                                                                            @can('expenses-delete')
                                                                             <form method="post"
                                                                                 action="{{ route('expenses.destroy', $expense->id) }}">
                                                                                 @csrf
@@ -98,6 +102,7 @@
                                                                                     class="btn btn-danger btn-b"><i
                                                                                         class="fa fa-trash"></i></button>
                                                                             </form>
+                                                                            @endcan
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -139,9 +144,13 @@
                                                                     <td>{{ $expense->invoice_url }}</td>
                                                                     <td>
                                                                         <div class="btn-group">
+                                                                            @can('expenses-update')
                                                                             <a class="btn btn-primary btn-a"
-                                                                                href="{{ route('expenses.edit', $expense->id) }}"><i
-                                                                                    class="fa fa-edit"></i></a> &nbsp;
+                                                                                href="{{ route('expenses.create', $expense->id) }}"><i
+                                                                                    class="fa fa-edit"></i></a>
+                                                                            @endcan        
+                                                                                    &nbsp;
+                                                                            @can('expenses-delete')
                                                                             <form method="post"
                                                                                 action="{{ route('expenses.destroy', $expense->id) }}">
                                                                                 @csrf
@@ -152,6 +161,7 @@
                                                                                     class="btn btn-danger btn-b"><i
                                                                                         class="fa fa-trash"></i></button>
                                                                             </form>
+                                                                            @endcan
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -193,9 +203,13 @@
                                                                     <td>{{ $expense->invoice_url }}</td>
                                                                     <td>
                                                                         <div class="btn-group">
+                                                                            @can('expenses-update')
                                                                             <a class="btn btn-primary btn-a"
-                                                                                href="{{ route('expenses.edit', $expense->id) }}"><i
-                                                                                    class="fa fa-edit"></i></a> &nbsp;
+                                                                                href="{{ route('expenses.create', $expense->id) }}"><i
+                                                                                    class="fa fa-edit"></i></a>
+                                                                            @endcan        
+                                                                                    &nbsp;
+                                                                            @can('expenses-delete')
                                                                             <form method="post"
                                                                                 action="{{ route('expenses.destroy', $expense->id) }}">
                                                                                 @csrf
@@ -206,6 +220,7 @@
                                                                                     class="btn btn-danger btn-b"><i
                                                                                         class="fa fa-trash"></i></button>
                                                                             </form>
+                                                                            @endcan
                                                                         </div>
                                                                     </td>
                                                                 </tr>

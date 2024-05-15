@@ -76,17 +76,7 @@
                             </select>
                           </div>
                         </div>
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                          <div class="form-group">
-                            <strong>Department:</strong>
-                            <select name="departments" class="form-control" required>
-                              <option value="">::select departmemt::</option>
-                              @foreach($departments as $department)
-                              <option value="{{$department->id}}">{{$department->departments}}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
+                        
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                           <button type="submit" class="btn btn-primary">Submit</button>
                         </div>

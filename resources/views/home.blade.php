@@ -23,6 +23,16 @@
                                         <h2>{{ $data['totalUsers'] }}</h2>
                                     </a>
                                 </div>
+                                
+                                <div class="statistics-item">
+                                    <a href="{{ route('users.index') }}" style="color: inherit; text-decoration: none;">
+                                        <p>
+                                            <i class="icon-sm fa fa-user mr-2"></i>
+                                            Total Company
+                                        </p>
+                                        <h2>{{ $data['totalCompany'] }}</h2>
+                                    </a>
+                                </div>
 
                                 <div class="statistics-item">
                                     <a href="{{ route('member.index') }}" style="color: inherit; text-decoration: none;">

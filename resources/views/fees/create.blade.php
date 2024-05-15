@@ -50,8 +50,6 @@
             <div class="row">
                 <div class="content-wrapper">
                     <!-- Content Header (Page header) -->
-
-
                     <div class="card row" style="background-color: transparent">
                         <div class="card-header d-block pb-0 border-0">
                             <div class="d-sm-flex flex-wrap justify-content-between align-items-center d-block mb-md-3 mb-0">
@@ -69,10 +67,11 @@
                                     <div class="text-center p-3 overlay-box"
                                         style="background-image: url({{ asset('assets/images/big/img1.jpg') }}); background: #222b34;">
                                         <div class="profile-photo">
-                                            <img src="{{ asset('uploads/member/profile/' . $member->profile) }}"
-                                                width="100" class="img-fluid rounded-circle" alt="">
-
-                                            <!-- <img src="{{ $member->image != '' ? $member->image : ($member->gender == 'male' ? asset('assets/male-placeholder.jpg') : asset('assets/female-placeholder.jpg')) }}" width="100" class="img-fluid rounded-circle" alt="" /> -->
+             @if($member->profile)
+                        <img src="{{ asset('uploads/member/profile/' . $user->profile) }}" alt="" class="rounded-circle" style="width: 100px; height: 100px;">
+                    @else
+                        <img src="{{ asset('admin/images/logo/profile.jpg') }}" alt="Default Profile Image" class="rounded-circle" style="width: 100px; height: 100px;">
+                    @endif
                                         </div>
                                         <h3 class="mt-3 mb-1 text-white">{{ $member->name }}</h3>
                                         <p class="text-white mb-0">{{ $member->email }}</p>
@@ -89,32 +88,58 @@
                                         <li class="list-group-item d-flex justify-content-between"><span
                                                 class="mb-0">Fees</span> <strong class="text-muted"> {{ $member->fees }}
                                             </strong></li>
-                                        <li class="list-group-item d-flex justify-content-between"
-                                            style="border-bottom: 0.2px solid rgba(0,0,0,0.1); width: 100%">
-                                            @if ($latestSubscription->latest_expiration != '')
-                                                @if ($timeLeft <= 8)
-                                                    <span class="badge light badge-warning" style="width: 100%">
-                                                        <i class="fa-duotone fa-timer mr-1"></i>
-                                                        Subscription will expire in {{ $timeLeft }} days
-                                                    </span>
-                                                @elseif(\Carbon\Carbon::parse($latestSubscription->latest_expiration)->gte(\Carbon\Carbon::now()))
-                                                    <span class="badge light badge-primary" style="width: 100%">
-                                                        <i class="fa-duotone fa-timer mr-1"></i>
-                                                        Subscription will expire in {{ $timeLeft }} days
-                                                    </span>
-                                                @else
-                                                    <span class="badge light badge-danger" style="width: 100%">
-                                                        <i class="fa-duotone fa-timer mr-1"></i>
-                                                        Subscription is expired
-                                                    </span>
-                                                @endif
-                                            @else
-                                                <span class="badge light badge-light" style="width: 100%">
+                                    <li class="list-group-item d-flex flex-column justify-content-between" style="border-bottom: 0.2px solid rgba(0, 0, 0, 0.1); width: 100%;">
+                                            
+                                            @if($latestSubscription->latest_expiration != '')
+                                                    @if($expired)
+                                                    <span style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; justify-content: center;" class="badge light badge-danger" data-toggle="tooltip" data-placement="top" title="Subscription has expired - {{ $timeLeft }} days">
+                                                                <div style="display: flex; align-items: center;">
+                                                                    <i class="fa fa-clock mr-1 text-white"></i>
+                                                                    <span>&nbsp; Subscription has been expired {{ ($timeLeft ?? 0) > 0 ? "-" . ($timeLeft ?? 0) : ($timeLeft ?? 0) }} days left</span>
+                                                                </div>
+                                                            </span>
+                                                        <br>
+                                                    @else
+                                                        @if($timeLeft <= 3)
+                                                            <span class="badge light badge-danger" style="width: 100%;">
+                                                                <i class="fa-duotone fa-timer mr-1"></i>
+                                                               
+                                                                Subscription has been  expired in {{ $timeLeft }} days ago
+                                                            </span>
+                                                            <br>
+                                                        
+                                                        @elseif($timeLeft <= 8)
+                                                        <span class="badge light badge-warning" style="width: 100%;">
+                                                            <i class="fa-duotone fa-timer mr-1"></i>
+                                                            Subscription will expire in {{ $timeLeft }} days
+                                                        </span>
+                                                        <br>
+                                                            
+                                                        @elseif(Carbon\Carbon::parse($latestSubscription->latest_expiration)->gte(Carbon\Carbon::now()))
+                                                            <span class="badge light badge-primary" style="width: 100%;">
+                                                                <i class="fa-duotone fa-timer mr-1"></i>
+                                                                Subscription will expire in {{ $timeLeft }} days
+                                                            </span>
+                                                        @else
+                                                            <span class="badge light badge-danger" style="width: 100%;">
+                                                                <i class="fa-duotone fa-timer mr-1"></i>
+                                                                Subscription is expired
+                                                            </span>
+                                                            <br>
+                                                            <a href="https://wa.me/{{ $member->phone }}?text=Your subscription is expired. Please renew to continue enjoying our services." type="button" class="btn btn-success btn-xs waves-effect btn-label waves-light" style="font-size: 12px; marginn-top: 1.5px;"><i class="fa fa-whatsapp label-icon"></i> Notify</a>
+                                                        @endif
+                                                    @endif    
+                                             @else
+                                                <span class="badge light badge-light" style="width: 100%;">
                                                     <i class="fa-duotone fa-timer mr-1"></i>
                                                     Not paid yet!
                                                 </span>
+                                            
                                             @endif
-                                        </li>
+                                            
+                                        
+                                            
+                                    </li>
                                     </ul>
                                     <br />
                                 </div>
@@ -166,6 +191,7 @@
                                             </div>
                                         </div>
 
+
                                         <div class="modal-footer">
                                             <button type="submit"  class="btn btn-primary">
                                                 <span wire:loading.remove wire:target="takeFee" style="font-size: 13px;">
@@ -184,9 +210,106 @@
                     </a>
                 </div>
             </div>
-        </div>
+            
+             <!-- Subscription -->
+            <div class="row" wire:ignore>
+                        <div class="col-xl-12 col-lg-12 col-sm-12 col-md-12">
+                            <div class="card overflow-hidden">
+                                <div class="card-header bg-white">
+                                    <div class="d-flex mr-3 align-items-center">
+                                        <span class="p-sm-3 p-2 mr-sm-3 mr-2 rounded-circle">
+                                            <i class="fa fa-light fa-money-bill-wave fs-22" style="clolor: #222b34;"></i>
+                                        </span>
+                                        <h4 class="fs-20 text-black mb-0">Subscriptions History</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0 mt-2 px-2">
+                                    <div class="table-responsive">
+                                        <table id="order-listing1" class="table dataTable no-footer subscription-dt" role="grid" aria-describedby="order-listing_info">
+                                            <thead>
+                                                <tr>
+                                                    <th><span class="font-w600 text-black fs-16">Paid On</span></th>
+                                                    <th><span class="font-w600 text-black fs-16">Expire Date</span></th>
+                                                    <th><span class="font-w600 text-black fs-16">Amount</span></th>
+                                                    <th><span class="font-w600 text-black fs-16">Action</span></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subscription-table-body">
+                                                @foreach ($subscriptions as $index => $data)
+                                            <tr>
+                                                <td>
+                                                    <span class="fs-14">{{ Carbon\Carbon::parse($data->date)->format('F d, Y') }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="fs-14">{{ Carbon\Carbon::parse($data->expiry)->format('F d, Y') }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="fs-14">{{ $data->amount }}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <button type="button" class="btn btn-primary shadow btn-xs sharp mr-1" data-toggle="modal" data-target="#exampleModal{{ $data->id }}" data-whatever="@mdo"><i class="fa fa-edit"></i></button>
+                                                       <form method="post" action="{{ route('subscriptions.delete', $data->id) }}">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="submit" class="btn btn-danger shadow btn-xs sharp"  onclick="confirm('Are you sure you want to delete the record')" style="margin: 0px 0px -12px 0px;"><i class="fa fa-trash"></i></button>
+                                                        </form>
+                                                       
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                                    <!-- Edit Modal -->
+                                              <div class="modal fade" id="exampleModal{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Subscriptions Update</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                         <form action="{{ route('subscriptions.update', $data->id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="form-group">
+                                                                        <label for="start_date">Start Date:</label>
+                                                                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ Carbon\Carbon::parse($data->date)->format('Y-m-d') }}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="expiry_date">Expiry Date:</label>
+                                                                        <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="{{ Carbon\Carbon::parse($data->expiry)->format('Y-m-d') }}">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="amount">Amount:</label>
+                                                                        <input type="number" class="form-control" id="amount" name="amount" value="{{ $data->amount }}">
+                                                                    </div>
+                                                                      <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                                      </div>
+                                                                </form>
+                                                      </div>
 
+                                                    </div>
+                                                  </div>
+                                                </div>                
+                                            @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+        
+        
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+             
             window.addEventListener('fees-collected-sucessfully', event => {
                 toastr.success(`${event.detail.body}`, `${event.detail.title}`, {
                     timeOut: 500000000,
@@ -233,5 +356,14 @@
                     });
                 }, 1000);
             }
+            
+            function showCustomInput(select) {
+                var customInput = document.getElementById('customInput');
+                if (select.value === 'custom') {
+                    customInput.style.display = 'block';
+                } else {
+                    customInput.style.display = 'none';
+                }
+            }    
         </script>
     @endsection

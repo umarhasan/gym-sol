@@ -106,26 +106,26 @@
 
                             <!-- Table for displaying profit and loss report -->
                             <div class="card-body">
-                                <table class="table">
+                                <table class="table" style="background:#f7f7f7;color:black;font-weight: bold;">
                                     <thead>
                                         <tr>
                                             <th>Category</th>
                                             <th>Amount</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody >
                                         <tr>
                                             
                                             <td><a href="{{ route('collections.history') }}">Total Income</a></td>
-                                            <td>${{ $totalIncome }}</td>
+                                            <td style="background-color: {{ $totalIncome >= 0 ? '#64a683' : '#f17b7b' }};color:white">${{ $totalIncome }}</td>
                                         </tr>
                                         <tr>
                                             <td><a href="{{ route('expenses.reports') }}">Total Expenses</a></td>
-                                            <td>${{ $totalExpense }}</td>
+                                            <td style="background-color: {{ $totalExpense >= 0 ? '#64a683' : '#f17b7b' }};color:white">${{ $totalExpense }}</td>
                                         </tr>
                                         <tr>
                                             <td>Net Profit/Loss</td>
-                                            <td>${{ $netProfitLoss }}</td>
+                                            <td style="background-color: {{ $netProfitLoss >= 0 ? '#64a683' : '#f17b7b' }};color:white">${{ $netProfitLoss }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

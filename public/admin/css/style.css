@@ -20481,7 +20481,8 @@ input:focus {
     display: inline-block;
     font-style: normal;
     font-size: .75rem;
-    color: #392C70;
+    background: #142d63;
+    color: #fff;
 }
 
 .rtl .sidebar .nav .nav-item .nav-link i.menu-arrow {
@@ -20519,6 +20520,7 @@ input:focus {
 .sidebar .nav .nav-item.active>.nav-link .menu-title,
 .sidebar .nav .nav-item.active>.nav-link .menu-arrow {
     color: #f1dc5c;
+    /*color:#04b76b;*/
 }
 
 .sidebar .nav .nav-item.active>.nav-link:before {
@@ -20593,8 +20595,8 @@ input:focus {
 }
 
 .sidebar .nav:not(.sub-menu)>.nav-item:hover:not(.nav-profile)>.nav-link {
-    background: #f6f6f6;
-    color: #8d9498;
+    background: #392c70;
+    color: #ffffff;
 }
 
 .sidebar .nav.sub-menu {
@@ -20646,8 +20648,8 @@ input:focus {
 }
 
 .sidebar .nav.sub-menu .nav-item .nav-link.active {
-    color: #fff;
-    background: transparent;
+    color: #000;
+    /*background: transparent;*/
 }
 
 .sidebar .nav.sub-menu .nav-item .nav-link.active:before {
@@ -20869,7 +20871,7 @@ input:focus {
 }
 
 .navbar.default-layout-navbar .navbar-brand-wrapper {
-    background: #222b34;
+    background: #ffffff;
     transition: width 0.25s ease, background 0.25s ease;
     -webkit-transition: width 0.25s ease, background 0.25s ease;
     -moz-transition: width 0.25s ease, background 0.25s ease;

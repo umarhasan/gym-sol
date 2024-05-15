@@ -49,6 +49,17 @@
             // "paging": false // Disable paging
         });
 
+        $('#expense-history').DataTable({
+            "aLengthMenu": [
+                [500, -1],
+                [500, "All"]
+            ],
+            "iDisplayLength": 500,
+            "language": {
+                search: ""
+            }
+        });
+        
         $('#order-listing').DataTable({
             "aLengthMenu": [
                 [5, 10, 15, -1],

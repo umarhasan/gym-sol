@@ -17,15 +17,21 @@ class ReportsController extends Controller
 
     public function UnpaidMembers()
     {
+        
+        
         $currentMonth = now()->format('m');
-        $unPaidMembers = User::leftJoin('fees', function ($join) use ($currentMonth) {
-            $join->on('users.id', '=', 'fees.user_id')
-                ->whereMonth('fees.date', '=', $currentMonth);
-        })
+        $unPaidMembers = User::with('Fees')
+            ->whereHas('roles', function($q) {
+                $q->where('name', 'Member');
+            })
+            ->leftJoin('fees', function ($join) use ($currentMonth) {
+                $join->on('users.id', '=', 'fees.user_id')
+                    ->whereMonth('fees.date', '=', $currentMonth);
+            })
             ->whereNull('fees.id')
             ->select('users.name', 'users.phone', 'users.image', 'users.id as userId', 'fees.*')
             ->where('users.club_id', Auth::user()->club_id)
-            ->get();
+            ->paginate(10);
         return view('reports.unpaid-members', ['unPaidMembers' => $unPaidMembers]);
     }
 
@@ -33,7 +39,6 @@ class ReportsController extends Controller
     {
 
         $currentYear = now()->year;
-
         $expiredMembers = Fees::join('users', 'users.id', '=', 'fees.user_id')
             ->select('users.id', 'users.name', 'users.email', 'users.phone', 'users.image', 'fees.id as fee_id') // Include fees.id in the select list
             ->selectRaw('MAX(expiry) as latest_expiration')
@@ -41,7 +46,8 @@ class ReportsController extends Controller
             ->groupBy('users.id', 'users.name', 'users.email', 'users.phone', 'users.image', 'fee_id') // Group by all selected columns
             ->havingRaw('DATEDIFF(MAX(expiry), NOW()) <= 0')
             ->where('fees.club_id', Auth::user()->club_id)
-            ->get();
+            ->whereNull('deleted_at')
+            ->paginate(10);
 
         return view('reports.expired-members', ['expiredMembers' => $expiredMembers]);
     }
@@ -57,21 +63,20 @@ class ReportsController extends Controller
             ->groupBy('user_id')
             ->havingRaw('MAX(expiry) <= NOW()') // Adjusted condition to use MAX function
             ->get();
-
-
+        
         $expiredMembersIds = $expiredMembers->pluck('user_id')->toArray();
-
+        
         $expiringSoon = Fees::join('users', 'users.id', '=', 'fees.user_id')
-            ->whereNotIn('user_id', $expiredMembersIds)
+            ->whereIn('user_id', $expiredMembersIds)
             ->whereYear('expiry', $currentYear)
-            ->select('users.name', 'users.email', 'users.phone', 'users.image')
+            ->select('users.id','users.name','users.email', 'users.phone', 'users.image')
+            ->groupBy('users.id','users.name', 'users.email', 'users.phone', 'users.image') // Group by users.id instead of user_id
             ->selectRaw('MAX(expiry) as latest_expiration')
-            ->groupBy('users.id') // Group by users.id instead of user_id
-            ->havingRaw('DATEDIFF(MAX(expiry), NOW()) > 1')
+            ->havingRaw('DATEDIFF(MAX(expiry), NOW()) >= 1')
             ->havingRaw('DATEDIFF(MAX(expiry), NOW()) <= 8')
             ->where('fees.club_id', Auth::user()->club_id)
             ->get();
-
+            
         return view('reports.soon-to-expire-members', ['expiringSoon' => $expiringSoon]);
     }
     public function collectionHistory(Request $request)
@@ -131,12 +136,15 @@ class ReportsController extends Controller
             }
         })->whereYear('date', Carbon::now()->year)
         ->where('club_id', Auth::user()->club_id)->get();
-
+        
+        $totalExpense = $expenses->sum('amount');
+        
         return view('reports.expenses-report', [
             'expenses' => $expenses,
             'filterBy' => $filterBy,
             'startDate' => $startDate,
             'endDate' => $endDate,
+            'totalExpense' => $totalExpense,
         ]);
     }
 

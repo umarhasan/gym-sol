@@ -21,32 +21,34 @@ class ExpensesController extends AdminBaseController
 {
     public function index()
     {
-        $currentMonth = Expense::where('club_id', auth()->user()->id)
+
+        $currentMonth = Expense::where('club_id', auth()->user()->club_id)
             ->whereMonth('date', '=', now()->month)
             ->orderByDesc('id')
             ->get();
 
-        $expensesToday = Expense::where('club_id', auth()->user()->id)
+        $expensesToday = Expense::where('club_id', auth()->user()->club_id)
             ->whereDate('date', Carbon::today())
             ->orderByDesc('id')
             ->get();
-
-        $lastSevenDays = Expense::where('club_id', auth()->user()->id)
+            
+        $lastSevenDays = Expense::where('club_id', auth()->user()->club_id)
             ->where('date', '>=', now()->subDays(7))
             ->orderByDesc('id')
             ->get();
-            
         return view('expenses.index', [
             'expenses' => $currentMonth,
             'expensesToday' => $expensesToday,
             'expensesLast7Days' => $lastSevenDays
         ]);
     }
+    
     public function create(){
         return view('expenses.create');
     }
     public function store(Request $request)
     {
+
         $request->validate([
             'amount' => 'required',
             'expense_by' => 'required',
@@ -61,7 +63,8 @@ class ExpensesController extends AdminBaseController
             'date' => Carbon::parse($request->date),
             'details' => $request->details,
             'paid_to' => $request->paid_to,
-            'club_id' => auth()->user()->id,
+            'club_id' => auth()->user()->club_id,
+            'created_by' => auth()->user()->id,
         ];
     
         // Check if an expense with the same details already exists
@@ -112,8 +115,7 @@ class ExpensesController extends AdminBaseController
         $expense->details = $request->details;
         $expense->paid_to = $request->paid_to;
 
-        // Add other fields to be updated as needed
-
+    
         $expense->save();
 
         session()->flash('expense-updated-successfully', ['title' => 'Success', 'body' => 'Expense updated successfully.']);

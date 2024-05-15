@@ -50,12 +50,13 @@
                                                     </div>
                                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                                         <div class="form-group">
-                                                            <strong>Email:</strong>
-                                                            <input class="form-control" type="email" name="email"
-                                                                required>
+                                                            <strong>Phone:</strong>
+                                                            <input class="form-control" type="text" name="phone"
+                                                                id="phone" placeholder="923172112995" required>
+                                                            <span id="phone-error" style="color: red;"></span>
                                                         </div>
                                                     </div>
-
+                                                    
                                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                                         <div class="form-group">
                                                             <strong>Gender:</strong><br>
@@ -68,16 +69,7 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xs-6 col-sm-6 col-md-6">
-                                                        <div class="form-group">
-                                                            <strong>Phone:</strong>
-                                                            <input class="form-control" type="text" name="phone"
-                                                                id="phone" placeholder="923172112995" required>
-                                                            <span id="phone-error" style="color: red;"></span>
-                                                            <!-- Error message placeholder -->
-                                                        </div>
-                                                    </div>
-                                                    
+
                                                     <div class="col-xs-6 col-sm-6 col-md-6">
                                                         <div class="form-group">
                                                             <strong>Expiry Date:</strong>

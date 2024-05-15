@@ -17,21 +17,24 @@ class StaffController extends AdminBaseController
 {
     public function index(Request $request)
     {
-        if (Auth::user()->is_admin) {
+        
+        // if (Auth::user()->is_admin) {
+        //     $data = User::whereHas('roles', function($q){
+        //         $q->where('name', 'Gym Staff');
+        //     })->orderBy('id','DESC')->get();
+        // } else {
             $data = User::whereHas('roles', function($q){
-                $q->where('name', 'Staff');
-            })->orderBy('id','DESC')->get();
-        } else {
-            $data = User::whereHas('roles', function($q){
-                $q->where('name', 'Staff');
-            })->where('created_by', Auth::id())->orderBy('id','DESC')->get();
-        }
+                $q->where('name', 'Gym Staff');
+            })
+            // ->where('created_by', Auth::id())->orderBy('id','DESC')
+            ->get();
+        // }
         return view('staff.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     public function create()
     {
-         $roles = Role::select(['id', 'name'])->where('name', 'staff')->get();
+         $roles = Role::select(['id', 'name'])->where('name', 'Gym Staff')->get();
          $departments = Department::get();
         return view('staff.create',compact('roles','departments'));
     }
@@ -45,9 +48,13 @@ class StaffController extends AdminBaseController
             'roles' => 'required'
         ]);
 
+        
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['created_by'] = Auth::user()->id;
+        $input['club_id'] = Auth::user()->id;
+        $input['email_verified_at'] = Carbon::now()->format('Y-m-d H:i:s');
+     
         // Create the user
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
@@ -70,7 +77,7 @@ class StaffController extends AdminBaseController
     {
         $data['departments'] = Department::all();
         $data['user'] = User::find($id);
-        $data['roles'] = Role::select(['id', 'name'])->where('name', 'staff')->get();
+        $data['roles'] = Role::select(['id', 'name'])->where('name', 'Gym Staff')->get();
         $data['userRole'] = $data['user']->roles->pluck('name','name')->all();
         return view('staff.edit',$data);
     }
@@ -79,7 +86,6 @@ class StaffController extends AdminBaseController
     {
         $this->validate($request, [
             'name' => 'required',
-            'department_id' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
             'roles' => 'required'

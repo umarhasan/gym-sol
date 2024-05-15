@@ -62,13 +62,13 @@
                             <td>{{ $user->fees }}</td>
                             <td>
                               <div class="btn-group">
-                                @can('user-edit')
+                                @can('staff-edit')
                                   <a class="btn btn-primary btn-a" href="{{ route('staff.edit',$user->id) }}">Edit</a> &nbsp;   
                                 @endcan
                                 @can('user-permission')
                                   <a class="btn btn-primary btn-a" href="{{ route('users.permission',$user->id) }}"> Permission</a>    
                                 @endcan
-                                @can('user-delete')
+                                @can('staff-delete')
                                 <form method="post" action="{{route('staff.destroy',$user->id)}}">
                                   @csrf
                                   @method('delete')
